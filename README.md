@@ -1,5 +1,7 @@
 # flickr_cli
-Command-line tool to simplify admin of newly uploaded photos. It’s very specifically customised for my usage, but anyone is free to use and adapt to their own use. My use case is mainly film photography. I have several cameras and lenses, and like the photo to be added to albums for the camera and lens that was used to take the shot. I add the photo to a selection of film-related groups, as well as camera, lens and film specific groups where appropriate. Other groups are selected depending on whether the image is colour or black and white, the film format (35mm or 120), aspect ratio (6x45, 6x6 etc), camera type (eg TLR), and square photo-specific groups if the pixel aspect ratio is exactly square.
+Command-line tool to simplify admin of newly uploaded photos. It’s very specifically customised for my usage, but anyone is free to use and adapt to their own use. My use case is mainly film photography. I have several cameras and lenses, and like the photo to be added to albums for the camera and lens that was used to take the shot. I also add the photo to a selection of film-related groups, as well as camera, lens, and film specific groups where appropriate. Other tags are added and groups selected depending on whether the image is colour or black and white, the film format (35mm or 120), aspect ratio (6x45, 6x6 etc), camera type (eg TLR), and square photo-specific groups if the pixel aspect ratio is exactly square.
+
+When run the script opens a browser authentication window to enable you to login and authenticate the session.
 
 There are several command line arguments.
 
@@ -9,17 +11,18 @@ This does the main donkey work of adding a newly uploaded photo to relevant grou
 
 The procedure to use is:
 
-Upload a photo using the Flickr uploader. The photo should have exif camera and lens data set that match corresponding album names, for example “Nikon F3” and "Nikkor 35mm f/2 Ai”.
+1. Upload a photo using the Flickr uploader. The photo should have exif camera and lens data set that match corresponding album names, for example “Nikon F3” and "Nikkor 35mm f/2 Ai”.
 
-Tag the photo with the film vendor name and type, for example "Kodak"  "Portra 800” or "Kentmere" "Kentmere 200"
+2. Tag the photo with the film vendor name and type, for example "Kodak"  "Portra 800” or "Kentmere" "Kentmere 200"
 
-Copy the new photo’s id from the page url
+3. Copy the new photo’s id from the page url
 
-Add the id to the flickr_cli command line.
+4. Add the id to the flickr_cli command line.
 
 Example output:
 
 ```
+./flickr_cli.py --id 54895067952 --add
 127.0.0.1 - - [02/Nov/2025 09:22:06] "GET /?oauth_token=72157720957970510-fcbf9a79c156140a&oauth_verifier=1bf80e1e3fa7797b HTTP/1.1" 200 -
 You are now authenticated as f/5.6ish
 Getting photo exif data from Flickr...
@@ -74,4 +77,58 @@ Adding tag "120 Film"...
 Adding tag "Medium Format"...
 Adding tag "Medium Format Film"...
 Adding photo to group: 6x6 COLOR film...
+```
+
+The is also a `—digital` argument that can be added to the command line which bypasses the adding of the photo to the film-specific groups, and a `—monochrome` argument that indicates that the photo is monochrome but the original film stock was colour.
+
+## ./flickr_cli.py —get_groups
+
+The list of groups to add the photo to is hard-coded in the files `core_groups.py` and `add_utils.py`. To find out the group IDs of the groups that you’re a member of, use the —get_groups argument.
+
+Example output:
+```
+./flickr_cli.py --get_groups
+127.0.0.1 - - [02/Nov/2025 21:15:41] "GET /?oauth_token=72157720958005856-3caed90c68ddf5fd&oauth_verifier=69843454e7c0c2c2 HTTP/1.1" 200 -
+You are now authenticated as f/5.6ish
+Getting user groups from Flickr...
+Group: !nto the atmosphere, id: 52879335@N00
+Group: &quot;I&#039;ll Be Your Mirror&quot;, id: 14747291@N22
+Group: &#039;Black and White&#039;  Creative Images!, id: 1575512@N25
+Group: * PERCEPTION *, id: 14904281@N22
+Group: * YELLOW on film *, id: 14805456@N23
+Group: ***Are You Experienced°°°Film Only***, id: 14715564@N23
+Group: *The Moody Moodpepper* ( Admin invite only), id: 14607726@N25
+Group: // The One-Eyed Poet, id: 2170622@N23
+Group: /r/analog, id: 2154336@N24
+Group: 100 Strangers, id: 342582@N20
+...
+```
+
+## ./flickr_cli.py --id 54895067952 —get_tags
+
+This retrieves the list of tags currently added to a photo.
+
+Example output:
+```
+./flickr_cli.py --id 54893586132 --get_tags
+127.0.0.1 - - [02/Nov/2025 21:20:04] "GET /?oauth_token=72157720958006216-54dad7d7556a0656&oauth_verifier=5923a0ab7a68b909 HTTP/1.1" 200 -
+You are now authenticated as f/5.6ish
+tag: Hayling Island
+tag: England
+tag: United Kingdom
+tag: Kodak
+tag: UltraMax 400
+tag: Film is Not Dead
+tag: Film Photography
+tag: Shooting Film
+tag: Believe In Film
+tag: Essential Film Holder
+tag: Analogue Toolbox for Capture One
+tag: Film
+tag: Analogue
+tag: Olympus
+tag: Olympus OM-1
+tag: 28mm Lens
+tag: 35mm Photography
+tag: 35mm Film
 ```
