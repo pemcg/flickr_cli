@@ -11,7 +11,7 @@ The procedure to use is:
 
 Upload a photo using the Flickr uploader. The photo should have exif camera and lens data set that match corresponding album names, for example “Nikon F3” and "Nikkor 35mm f/2 Ai”.
 
-Tag the photo with the film type, for example "Kodak"  "Portra 800” or "Kentmere" "Kentmere 200"
+Tag the photo with the film vendor name and type, for example "Kodak"  "Portra 800” or "Kentmere" "Kentmere 200"
 
 Copy the new photo’s id from the page url
 
@@ -19,7 +19,10 @@ Add the id to the flickr_cli command line.
 
 Example output:
 
-`Getting photo exif data from Flickr...
+```
+127.0.0.1 - - [02/Nov/2025 09:22:06] "GET /?oauth_token=72157720957970510-fcbf9a79c156140a&oauth_verifier=1bf80e1e3fa7797b HTTP/1.1" 200 -
+You are now authenticated as f/5.6ish
+Getting photo exif data from Flickr...
 Photo dimensions in pixels: [3852, 4158]
 Getting user groups from Flickr...
 -- Adding random set of core film groups --
@@ -71,4 +74,4 @@ Adding tag "120 Film"...
 Adding tag "Medium Format"...
 Adding tag "Medium Format Film"...
 Adding photo to group: 6x6 COLOR film...
-`
+```
