@@ -85,7 +85,7 @@ Adding photo to group: 6x6 COLOR film...
 
 ### Optional arguments
 
-There are 2 optional argument that can be used with `—add`
+There are 4 optional argument that can be used with `—add`
 
 #### —digital
 
@@ -95,7 +95,9 @@ The `—digital` argument that can be added to the command line which bypasses t
 
 The `—monochrome` argument indicates that the photo is monochrome but the original film stock was colour, so don’t add any self-developed tags or groups
 
-## Meta functions
+(See also the geo-tagging options that can also be used in-line with `—add`)
+
+## Utility functions
 
 Some of the functions are useful when developing or extending the code base
 
@@ -121,7 +123,6 @@ Group: /r/analog, id: 2154336@N24
 Group: 100 Strangers, id: 342582@N20
 ...
 ```
-
 ### —get_tags
 
 The `—get_tags` argument retrieves the list of tags currently added to a photo. It must be used with the `—id` argument to specify the photo ID on which to perform the operation.
@@ -150,6 +151,20 @@ tag: 28mm Lens
 tag: 35mm Photography
 tag: 35mm Film
 ```
+## Geo-tagging
+
+There are 2 functions that can be used to geo-tag the photos in Flickr
+
+### —location
+
+The `—location` argument can be used to geo-tag the photo based on a text string such as "Winchester cathedral" or “Southampton”. This uses the Here API, and so requires a valid here API key in the `keys.py` file.
+
+### —coords
+
+The `—coords` argument can be used to geo-tag the photo based on NSEW-based latitude and longitude. For example when copied from a dropped pin in Apple Maps: `—coords "51.06612° N, 1.38359° W”`
+
+Either of these arguments can also be used in-line with the `—add` command as well.
+
 ## File uploads
 
 The tool can be used to upload a file if the Flickr uploader is not used
