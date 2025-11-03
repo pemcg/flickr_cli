@@ -23,3 +23,7 @@ is_TLR              = False
 is_pc_lens          = False
 is_vintage_digital  = False
 is_vintage_lens     = True  # default to true as most lenses are vintage
+
+GROUP_MEMBER        = 2
+GROUP_MODERATOR     = 3
+GROUP_ADMIN         = 4

@@ -7,9 +7,7 @@ import get_utils
 import time
 from datetime import datetime
 
-GROUP_MEMBER    = 2
-GROUP_MODERATOR = 3
-GROUP_ADMIN     = 4
+
 
 # -------------------------------------------------
 
@@ -70,7 +68,7 @@ def get_user_groups_with_admins(flickr):
 	flickr_data = flickr_api.get_pool_groups(flickr)
 	for group in flickr_data['groups']['group']:
 		admin_list = ""
-		admins = get_group_members(flickr, group['id'], GROUP_ADMIN)
+		admins = get_group_members(flickr, group['id'], globals.GROUP_ADMIN)
 		for admin in admins:
 			admin_list = admin_list + f' {admin["nsid"]} ,'
 		print(f'Group: {group["name"]}, id: {group["id"]}, {admin_list}')
@@ -82,7 +80,7 @@ def get_user_groups_with_admin_activity(flickr, days):
 	flickr_data = flickr_api.get_pool_groups(flickr)
 	for group in flickr_data['groups']['group']:
 		print(f'Group: {group["name"]}, id: {group["id"]}')
-		admins = get_group_members(flickr, group['id'], GROUP_ADMIN)
+		admins = get_group_members(flickr, group['id'], globals.GROUP_ADMIN)
 		for admin in admins:
 			photo_count = get_utils.get_user_photo_count_for_recent_period(flickr, admin['nsid'], days)
 			fave_count = get_utils.get_user_faves_count_for_recent_period(flickr, admin['nsid'], days)
@@ -95,7 +93,7 @@ def get_user_groups_with_no_admin_activity(flickr, days):
 	flickr_data = flickr_api.get_pool_groups(flickr)
 	for group in flickr_data['groups']['group']:
 		group_has_no_active_admin = True
-		admins = get_group_members(flickr, group['id'], GROUP_ADMIN)
+		admins = get_group_members(flickr, group['id'], globals.GROUP_ADMIN)
 		for admin in admins:
 			photo_count = get_utils.get_user_photo_count_for_recent_period(flickr, admin['nsid'], days)
 			fave_count = get_utils.get_user_faves_count_for_recent_period(flickr, admin['nsid'], days)
@@ -113,7 +111,7 @@ def get_group_members_with_recent_activity(flickr, group_id, days):
 	member_count = 0
 	active_members = 0
 	print(f'Getting group members with recent activity from Flickr, starting at {datetime.now().strftime("%H:%M:%S")}...')
-	members = get_group_members(flickr, group_id, GROUP_MEMBER)
+	members = get_group_members(flickr, group_id, globals.GROUP_MEMBER)
 	for member in members:
 		time.sleep(2)
 		member_count += 1

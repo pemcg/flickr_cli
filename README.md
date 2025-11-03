@@ -5,9 +5,13 @@ When run the script opens a browser authentication window to enable you to login
 
 There are several command line arguments.
 
-## ./flickr_cli.py --id 54895067952 --add
+## Uploaded photo processing
 
-This does the main donkey work of adding a newly uploaded photo to relevant groups and albums, and adds tags.
+The primary purpose of the tool is the adding of a newly uploaded photo to groups and albums, tagging, etc, as described.
+
+### --add
+
+The `—add` argument does the main donkey work of adding a newly uploaded photo to relevant groups and albums, and adds tags. It must be used with the `—id` argument to specify the photo ID on which to perform the operation.
 
 The procedure to use is:
 
@@ -79,11 +83,25 @@ Adding tag "Medium Format Film"...
 Adding photo to group: 6x6 COLOR film...
 ```
 
-The is also a `—digital` argument that can be added to the command line which bypasses the adding of the photo to the film-specific groups, and a `—monochrome` argument that indicates that the photo is monochrome but the original film stock was colour.
+### Optional arguments
 
-## ./flickr_cli.py —get_groups
+There are 2 optional argument that can be used with `—add`
 
-The list of groups to add the photo to is hard-coded in the files `core_groups.py` and `add_utils.py`. To find out the group IDs of the groups that you’re a member of, use the —get_groups argument.
+#### —digital
+
+The `—digital` argument that can be added to the command line which bypasses the adding of the photo to the film-specific groups. 
+
+#### —monochrome
+
+The `—monochrome` argument indicates that the photo is monochrome but the original film stock was colour, so don’t add any self-developed tags or groups
+
+## Meta functions
+
+Some of the functions are useful when developing or extending the code base
+
+### —get_groups
+
+The list of groups to add the photo to is hard-coded in the files `core_groups.py` and `add_utils.py`. To find out the group IDs of the groups that you’re a member of, use the `--get_groups` argument.
 
 Example output:
 ```
@@ -104,9 +122,9 @@ Group: 100 Strangers, id: 342582@N20
 ...
 ```
 
-## ./flickr_cli.py --id 54895067952 —get_tags
+### —get_tags
 
-This retrieves the list of tags currently added to a photo.
+The `—get_tags` argument retrieves the list of tags currently added to a photo. It must be used with the `—id` argument to specify the photo ID on which to perform the operation.
 
 Example output:
 ```
@@ -131,4 +149,86 @@ tag: Olympus OM-1
 tag: 28mm Lens
 tag: 35mm Photography
 tag: 35mm Film
+```
+## File uploads
+
+The tool can be used to upload a file if the Flickr uploader is not used
+
+### —upload
+
+## Group admin related functionality
+
+As I’m the admin of 3 groups, I wrote some functions to get me more insight into the groups that I am managing
+
+### —get_group_photos
+
+This is an argument to help with group admin activity. It requires the `—group` (current hardcoded as ‘hp5+', ‘delta3200’, or ‘wearenotdeadyet’ as these are the groups for which I’m admin), and `—days` which is the number of days to look back over. It prints a summary of the photos added to the group in the time period.
+
+Example output:
+```
+./flickr_cli.py --get_group_photos --group 'delta3200' --days 5
+127.0.0.1 - - [03/Nov/2025 09:28:57] "GET /?oauth_token=72157720957958057-395b94493e333ba4&oauth_verifier=a38d0ae31c10321c HTTP/1.1" 200 -
+You are now authenticated as f/5.6ish
+******************************************************************************************
+
+- Photo ID: 54897836639
+- User: thedamnedsins
+- Title: Silence Within the Darkness
+- Description: In the hush of shadowed realms, where light dares not intrude, there exists a silence more profound than absence—a stillness that listens, that remembers. 「闇の中の静寂」 speaks not merely of quietude, but of the soul’s retreat into the unseen, the unspoken.
+Darkness is not the enemy of truth, but its cradle. In its embrace, we confront the impermanence of form, the echo of forgotten selves, and the quiet dignity of things left unsaid. Silence within the darkness is not void—it is potential. It is the breath before revelation, the pause that holds eternity.
+
+- Tags:
+FlickrError (in get_photo_exif): Error: 2: Permission denied
+******************************************************************************************
+
+- Photo ID: 5161892320
+- User: Dominic Skathanas
+- Title: Delta 3200
+- Description: Femme fatal of my murder photoseries to the tune of film noir. It culminated with a picture of me, dead, in a pool of red acrylic paint.
+- Tags:
+    delta3200
+- Exif Camera: Nikon Nikon COOLSCAN V ED
+******************************************************************************************
+
+- Photo ID: 52909599156
+- User: chetbak59
+- Title: le premier jour, de tous les autres
+- Description: m6 delta 3200
+- Tags:
+    argentique
+    leica
+    film
+    noir
+    analogique
+    ilford
+******************************************************************************************
+
+- Photo ID: 54894291026
+- User: mind-boggled
+- Title: A place that does not welcome lingering
+- Description: Ilford Delta 3200 shot with a Olympus Pen-FT, using a 20mm.
+- Tags:
+    ilford
+    film
+    analogue
+    olympuspen
+    olympus
+    ominous
+    creepy
+    mall
+    old
+    atmosphere
+    vintage
+    liminal
+    hall
+    empty
+    lifeless
+    3200
+    dark
+    gloomy
+    eerie
+    monochrome
+- Exif Camera: Plustek OpticFilm 8200i
+******************************************************************************************
+...
 ```

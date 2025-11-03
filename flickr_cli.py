@@ -10,65 +10,97 @@ import get_utils
 import add_utils
 import group_utils
 import globals
+from typing import List, Dict, Set, Optional
 
 #-------------------------------------------------------------------------------------------------------------
-def sanity_check_args(parser, args):
-    #
-    # No serverlist specified?
-    #
-    if args.add and not args.id:
-        parser.error("Must specify the --id switch when using --add")
-        return False
-    #
-    # -c & --copyfrom together?
-    #
-    if args.get_tags and not args.id:
-        parser.error("Must specify the --id switch when using --get_tags")
-        return False
-    #
-    # --copysrc without --copydest (or vice-versa)
-    #
-    # if (args.FilenameTo and not args.FileCopyDest) or\
-    #     (args.FileCopyDest and not args.FilenameTo):
-    #     parser.error("args --copysrc and --copydest must be used together")
-    #     return False
-    # #
-    # # -f with --copysrc or --copydest (or vice-versa)
-    # #
-    # if (args.FilenameFrom and (args.FilenameTo or args.FileCopyDest)):
-    #     parser.error("option --copyfrom with --copysrc and/or --copydest cannot be used together")
-    #     return False
-    # #
-    # # -c with --copysrc or --copydest (or vice-versa)
-    # #
-    # if (args.Command and (args.FilenameTo or args.FileCopyDest)):
-    #     parser.error("option -c with --copysrc and/or --copydest cannot be used together")
-    #     return False
-    # #
-    # # -q with anything else
-    # #
-    # if (args.Query and (args.FilenameTo or args.FileCopyDest or args.Command)):
-    #     parser.error("option -q with the copy commands and/or -c cannot be used together")
-    #     return False
-    # #
-    # # --nowait without -c
-    # #
-    # if (args.NoWait and not args.Command):
-    #     parser.error("option --nowait can only be used with the -c switch")
-    #     return False
-    #
-    # Default
-    #
-    return True
-#
-# End of SanityCheckOptions
+
+def sanity_check_arguments(args: argparse.Namespace) -> bool:
+    """
+    Template function to validate command line arguments for mutual exclusivity
+    and required argument dependencies.
+    
+    Args:
+        args: Parsed arguments from argparse
+        
+    Returns:
+        bool: True if all checks pass, False otherwise
+        
+    Raises:
+        SystemExit: If validation fails (calls sys.exit())
+    """
+    
+    # Define mutually exclusive argument groups
+    # Each tuple contains arguments that cannot be used together
+    MUTUALLY_EXCLUSIVE_GROUPS = [
+        ('add', 'upload', 'get_tags', 'get_groups'),  # Example: action arguments
+        ('verbose', 'quiet'),            # Example: output level arguments
+    ]
+    
+    # Define argument dependencies
+    # Key: argument that requires dependencies
+    # Value: list of required arguments when key is present
+    ARGUMENT_DEPENDENCIES = {
+        'add': ['id'],           # create requires target and name
+        'get_tags': ['id'],                   # delete requires target
+        'get_group_photos': ['group', 'days'],
+        'get_user_groups_with_admin_activity': ['days'],
+        'get_group_members_with_recent_activity': ['group', 'days'],
+    }
+    
+    # Define conditional dependencies (at least one required)
+    # Key: argument that requires at least one from the list
+    # Value: list of arguments where at least one must be present
+    AT_LEAST_ONE_REQUIRED = {
+        'upload': ['filename', 'title', 'description'],
+    }
+    
+    errors = []
+    
+    # Check for mutually exclusive arguments
+    for exclusive_group in MUTUALLY_EXCLUSIVE_GROUPS:
+        present_args = [arg for arg in exclusive_group if getattr(args, arg, None)]
+        if len(present_args) > 1:
+            errors.append(f"Mutually exclusive arguments provided: {', '.join(present_args)}")
+    
+    # Check argument dependencies
+    for main_arg, required_args in ARGUMENT_DEPENDENCIES.items():
+        if getattr(args, main_arg, None):  # If main argument is present
+            missing_deps = []
+            for req_arg in required_args:
+                if not getattr(args, req_arg, None):
+                    missing_deps.append(req_arg)
+            
+            if missing_deps:
+                errors.append(f"Argument '{main_arg}' requires: {', '.join(missing_deps)}")
+    
+    # Check "at least one required" dependencies
+    for main_arg, option_args in AT_LEAST_ONE_REQUIRED.items():
+        if getattr(args, main_arg, None):  # If main argument is present
+            present_options = [arg for arg in option_args if getattr(args, arg, None)]
+            if not present_options:
+                errors.append(f"Argument '{main_arg}' requires at least one of: {', '.join(option_args)}")
+    
+   
+    if hasattr(args, 'days') and args.days:
+        if args.days < 1:
+            errors.append(f"days count must be positive, got: {args.days}")
+    
+    # Report errors and exit if any found
+    if errors:
+        print("❌ Argument validation errors:", file=sys.stderr)
+        for i, error in enumerate(errors, 1):
+            print(f"  {i}. {error}", file=sys.stderr)
+        print("\nUse --help for usage information.", file=sys.stderr)
+        sys.exit(1)
+    
+    return
+
 #-------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Add a photo to Flickr globals.groups.')
     parser.add_argument('--id', help='The ID of the photo or group to process', required=False)
     parser.add_argument('--get_groups', help='Get group list for photo or user', action='store_true')
-    parser.add_argument('--get_group_admins', help='More details', action='store_true')
     parser.add_argument('--get_user_groups_with_admins', help='More details', action='store_true')
     parser.add_argument('--get_user_groups_with_admin_activity', help='More details', action='store_true')
     parser.add_argument('--get_user_groups_with_no_admin_activity', help='More details', action='store_true')
@@ -93,9 +125,7 @@ if __name__ == '__main__':
     #
     # Sanity check arguments and their combinations
     #
-    if not sanity_check_args(parser, args):
-        parser.print_help()
-        sys.exit()
+    sanity_check_arguments(args)
     #
     # set some global variables based on command line arguments
     #
@@ -134,8 +164,6 @@ if __name__ == '__main__':
     #
     if args.get_groups:
         get_utils.get_user_groups(flickr_client, print_output=True)
-    elif args.get_group_admins:
-        group_utils.get_group_admins(flickr_client)
     elif args.get_user_groups_with_admins:
         group_utils.get_user_groups_with_admins(flickr_client)
     elif args.get_user_groups_with_admin_activity:
@@ -145,7 +173,7 @@ if __name__ == '__main__':
     elif args.get_group_photos:
         match args.group:
             case 'hp5+':
-                group_id = '    '
+                group_id = '342830@N20'
             case 'delta3200':
                 group_id = '55584695@N00'
             case 'wearenotdeadyet':
