@@ -1,8 +1,9 @@
 # flickr_cli
 Command-line tool to simplify admin of newly uploaded photos. It’s very specifically customised for my usage, but anyone is free to use and adapt to their own use. My use case is mainly film photography. I have several cameras and lenses, and like the photo to be added to albums for the camera and lens that was used to take the shot. I also add the photo to a selection of film-related groups, as well as camera, lens, and film specific groups where appropriate. Other tags are added and groups selected depending on whether the image is colour or black and white, the film format (35mm or 120), aspect ratio (6x45, 6x6 etc), camera type (eg TLR), and square photo-specific groups if the pixel aspect ratio is exactly square.
 
-When run the script opens a browser authentication window to enable you to login and authenticate the session.
+## Authentication
 
+When run the script opens a browser authentication window to enable you to login and authenticate the session.
 All authentication keys are held in a separate file `flickr_api/keys.py`, with the following format:
 
 ```
@@ -12,14 +13,15 @@ USER_ID              = '...9724@N0.''
 HERE_APP_ID          = '...ZzL43zQf..'
 HERE_API_KEY         = '...zmKzgUUvjH...'
 ```
+## Command line Arguments
 
-There are several command line arguments.
+There are several command line arguments, grouped into various categories
 
-## Uploaded photo processing
+### Uploaded photo processing
 
 The primary purpose of the tool is the adding of a newly uploaded photo to groups and albums, tagging, etc, as described.
 
-### --add
+#### --add
 
 The `—add` argument does the main donkey work of adding a newly uploaded photo to relevant groups and albums, and adds tags. It must be used with the `—id` argument to specify the photo ID on which to perform the operation.
 
@@ -93,25 +95,25 @@ Adding tag "Medium Format Film"...
 Adding photo to group: 6x6 COLOR film...
 ```
 
-### Optional arguments
+#### Optional arguments
 
 There are several optional argument that can be used with `—add`
 
-#### —digital
+##### —digital
 
 The `—digital` argument that can be added to the command line which bypasses the adding of the photo to the film-specific groups. 
 
-#### —monochrome
+##### —monochrome
 
 The `—monochrome` argument indicates that the photo is monochrome but the original film stock was colour, so don’t add any self-developed tags or groups
 
 (See also the geo-tagging options that can also be used in-line with `—add`)
 
-## Utility functions
+### Utility functions
 
 Some of the functions are useful when developing or extending the code base
 
-### —get_groups
+#### —get_groups
 
 The list of groups to add the photo to is hard-coded in the files `core_groups.py` and `add_utils.py`. To find out the group IDs of the groups that you’re a member of, use the `--get_groups` argument.
 
@@ -133,7 +135,7 @@ Group: /r/analog, id: 2154336@N24
 Group: 100 Strangers, id: 342582@N20
 ...
 ```
-### —get_tags
+#### —get_tags
 
 The `—get_tags` argument retrieves the list of tags currently added to a photo. It must be used with the `—id` argument to specify the photo ID on which to perform the operation.
 
@@ -161,15 +163,15 @@ tag: 28mm Lens
 tag: 35mm Photography
 tag: 35mm Film
 ```
-## Geo-tagging
+### Geo-tagging
 
 There are 2 functions that can be used to geo-tag the photos in Flickr
 
-### —location
+#### —location
 
 The `—location` argument can be used to geo-tag the photo based on a text string such as "Winchester cathedral" or “Southampton”. This uses the Here API, and so requires a valid here API key in the `keys.py` file.
 
-### —coords
+#### —coords
 
 The `—coords` argument can be used to geo-tag the photo based on NSEW-based latitude and longitude. For example when copied from a dropped pin in Apple Maps: `—coords "51.06612° N, 1.38359° W”`
 
@@ -185,17 +187,17 @@ Setting location...
 
 Either of these arguments can also be used in-line with the `—add` command as well.
 
-## File uploads
+### File uploads
 
 The tool can be used to upload a file if the Flickr uploader is not used
 
-### —upload
+#### —upload
 
-## Group admin related functionality
+### Group admin related functionality
 
 As I’m the admin of 3 groups, I wrote some functions to get me some insight into the groups that I am managing
 
-### —get_group_photos
+#### —get_group_photos
 
 This is an argument to help with group admin activity. It requires the `—group` (current hardcoded as ‘hp5+', ‘delta3200’, or ‘wearenotdeadyet’ as these are the groups for which I’m admin), and `—days` which is the number of days to look back over. It prints a summary of the photos added to the group in the time period.
 
