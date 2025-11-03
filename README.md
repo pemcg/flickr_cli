@@ -15,7 +15,7 @@ HERE_API_KEY         = '...zmKzgUUvjH...'
 ```
 ## Command line Arguments
 
-There are several command line arguments, grouped into various categories
+There are several command line arguments, grouped into various categories.
 
 ### Uploaded photo processing
 
@@ -97,7 +97,7 @@ Adding photo to group: 6x6 COLOR film...
 
 #### Optional arguments
 
-There are several optional argument that can be used with `—add`
+There are several optional argument that can be used with `—add`.
 
 ##### —digital
 
@@ -105,13 +105,13 @@ The `—digital` argument that can be added to the command line which bypasses t
 
 ##### —monochrome
 
-The `—monochrome` argument indicates that the photo is monochrome but the original film stock was colour, so don’t add any self-developed tags or groups
+The `—monochrome` argument indicates that the photo is monochrome but the original film stock was colour, so don’t add any self-developed tags or groups.
 
-(See also the geo-tagging options that can also be used in-line with `—add`)
+(See also the geo-tagging options that can also be used in-line with `—add`).
 
 ### Utility functions
 
-Some of the functions are useful when developing or extending the code base
+Some of the functions are useful when developing or extending the code base.
 
 #### —get_groups
 
@@ -165,7 +165,7 @@ tag: 35mm Film
 ```
 ### Geo-tagging
 
-There are 2 functions that can be used to geo-tag the photos in Flickr
+There are 2 functions that can be used to geo-tag the photos in Flickr.
 
 #### —location
 
@@ -173,7 +173,7 @@ The `—location` argument can be used to geo-tag the photo based on a text stri
 
 #### —coords
 
-The `—coords` argument can be used to geo-tag the photo based on NSEW-based latitude and longitude. For example when copied from a dropped pin in Apple Maps: `—coords "51.06612° N, 1.38359° W”`
+The `—coords` argument can be used to geo-tag the photo based on NSEW-based latitude and longitude. For example when copied from a dropped pin in Apple Maps: `—coords "51.06612° N, 1.38359° W”`.
 
 Both must be used with the `—id` argument to specify the photo ID on which to perform the operation.
 
@@ -189,13 +189,23 @@ Either of these arguments can also be used in-line with the `—add` command as 
 
 ### File uploads
 
-The tool can be used to upload a file if the Flickr uploader is not used
+The tool can be used to upload a file if the Flickr uploader is not used.
 
 #### —upload
 
+The `—upload` switch can be used along with `—file`, `—title` and `—description` to upload a file to Flickr.
+
+Example output:
+```
+./flickr_cli.py --upload --file "/Users/pemcg/Exports/XT504090.jpg" --title "Shaded" --description "Hasselblad 503cx, Carl Zeiss Distagon 50mm f/4 CF FLE, Lomography CN400"
+127.0.0.1 - - [03/Nov/2025 13:07:03] "GET /?oauth_token=72157720958040870-b0209ceec2d28d4f&oauth_verifier=e3bebb3d3731511 HTTP/1.1" 200 -
+You are now authenticated as f/5.6ish
+New photo id: 54898932289
+```
+
 ### Group admin related functionality
 
-As I’m the admin of 3 groups, I wrote some functions to get me some insight into the groups that I am managing
+As I’m the admin of 3 groups, I wrote some functions to get me some insight into the groups that I'm managing.
 
 #### —get_group_photos
 
@@ -267,5 +277,93 @@ FlickrError (in get_photo_exif): Error: 2: Permission denied
     monochrome
 - Exif Camera: Plustek OpticFilm 8200i
 ******************************************************************************************
+...
+```
+#### --get_user_groups_with_admin_activity
+
+This function is useful to see which groups that you’re are a member of are administratively ‘dormant’, i.e. have had no activity from any group admin for a number of weeks/months/years. It iterates through all of your groups, look up the group admins, and looks to see of each admin has either posted or faved anything in the previous specified number of days. This argument requires the additional argument `—days`.
+
+Example output:
+```
+./flickr_cli.py --get_user_groups_with_admin_activity --days 365
+127.0.0.1 - - [03/Nov/2025 13:19:40] "GET /?oauth_token=72157720957965717-40fb01a03280687e&oauth_verifier=f3c980e3ae066114 HTTP/1.1" 200 -
+You are now authenticated as f/5.6ish
+Getting user groups from Flickr...
+Group: !nto the atmosphere, id: 52879335@N00
+    Admin id: 28371556@N06, name: pierre-vdm, last 365 day photo count: 12, last 365 day fave count: 50
+    Admin id: 90463792@N00, name: ribena_wrath, last 365 day photo count: 0, last 365 day fave count: 0
+Group: &quot;I&#039;ll Be Your Mirror&quot;, id: 14747291@N22
+    Admin id: 8188344@N02, name: Gianni Mazzarelli, last 365 day photo count: 4, last 365 day fave count: 4478
+    Admin id: 187315775@N03, name: gianni.mazzarelli, last 365 day photo count: 0, last 365 day fave count: 0
+Group: &#039;Black and White&#039;  Creative Images!, id: 1575512@N25
+    Admin id: 185379416@N07, name: Gentleman C.B., last 365 day photo count: 2, last 365 day fave count: 8
+    Admin id: 164652074@N05, name: Cadence and Craig Abbot Creative Photography, last 365 day photo count: 9, last 365 day fave count: 340
+    Admin id: 130128901@N07, name: Chatwick University Criminology Department, last 365 day photo count: 4, last 365 day fave count: 32
+    Admin id: 55482661@N06, name: J-Mi & F (Josef & Josef@ K), last 365 day photo count: 0, last 365 day fave count: 0
+    Admin id: 12349220@N00, name: jean sept, last 365 day photo count: 0, last 365 day fave count: 3
+    Admin id: 36240071@N07, name: NormaN Tacchi, last 365 day photo count: 0, last 365 day fave count: 0
+    Admin id: 62602097@N00, name: Novowyr, last 365 day photo count: 0, last 365 day fave count: 702
+    Admin id: 149057579@N04, name: philippephotography1, last 365 day photo count: 0, last 365 day fave count: 3
+    Admin id: 128363297@N02, name: Bernd Kretzer, last 365 day photo count: 0, last 365 day fave count: 793
+    Admin id: 35968016@N03, name: Lux Ludos, last 365 day photo count: 41, last 365 day fave count: 1119
+    Admin id: 138943594@N08, name: Sundance Photos, last 365 day photo count: 0, last 365 day fave count: 3
+    Admin id: 138748223@N07, name: Rouge France, last 365 day photo count: 0, last 365 day fave count: 0
+    Admin id: 125216791@N07, name: *ines_maria, last 365 day photo count: 5, last 365 day fave count: 7589
+    Admin id: 70626035@N00, name: jacilluch, last 365 day photo count: 0, last 365 day fave count: 0
+    Admin id: 49864218@N07, name: DirkBee, last 365 day photo count: 117, last 365 day fave count: 95
+    Admin id: 58555558@N07, name: Jim Archer, last 365 day photo count: 0, last 365 day fave count: 0
+...
+```
+
+#### --get_user_groups_with_no_admin_activity
+
+This is a companion method to the above, but only lists groups (that you’re a member of) where none of the group admins have displayed any posting or fave activity in the specified number of days. This is useful in case you feel the need to contact Flickr admins and request a takeover of the admin role for the group.
+
+Example output:
+```
+./flickr_cli.py --get_user_groups_with_no_admin_activity --days 365
+127.0.0.1 - - [03/Nov/2025 13:16:53] "GET /?oauth_token=72157720958019914-2bab487931820bb5&oauth_verifier=5440ce2a58df5739 HTTP/1.1" 200 -
+You are now authenticated as f/5.6ish
+Getting user groups with no recent admin activity from Flickr...
+Group: 28mm is my Favorite, id: 1175002@N21
+ -- admin name: Alice Nggan
+Group: 35mm blackandwhite, id: 57796404@N00
+ -- admin name: timx
+Group: 645 Medium Format, id: 304405@N25
+ -- admin name: petros_canon
+Group: Acros, id: 32685380@N00
+ -- admin name: rich8155 (Richard Sintchak)
+Group: ALL ABOUT FILM, id: 586170@N24
+ -- admin name: The Dalai Lomo
+Group: All Things Film, id: 1045471@N24
+ -- admin name: omatix
+Group: Analog Soul, id: 1086616@N22
+ -- admin name: ledh
+ -- admin name: supersteady
+ -- admin name: porkscrew
+Group: anti paradise, id: 1841895@N25
+ -- admin name: amaiamolinet.com
+Group: BelieveInFilm.com, id: 1690604@N25
+ -- admin name: believeinfilm
+Group: Berlin Analog, id: 12632627@N00
+ -- admin name: tilde~
+Group: Bessa R, id: 777631@N25
+ -- admin name: p h o n g s [ Oิ']
+```
+#### --get_group_members_with_recent_activity
+
+This function looks to see which if the group’s member are still active, i.e have posted or faved anything in the previous specified number of days. Useful to see if (for example) a group has 4000 members, but only 500 are active on Flickr.
+This function takes a long time to run as it’s self-limiting to comply with the Flickr API guidelines for the number of API calls/hour made. The group names are hard-coded for my convenience and translated to their corresponding group ID in a hash.
+
+Example output:
+```
+./flickr_cli.py --get_group_members_with_recent_activity --group 'wearenotdeadyet' --days 120
+127.0.0.1 - - [03/Nov/2025 13:29:06] "GET /?oauth_token=72157720958041975-85564b11295ff675&oauth_verifier=b560734df0fd648b HTTP/1.1" 200 -
+You are now authenticated as f/5.6ish
+Getting group members with recent activity from Flickr, starting at 13:29:07...
+Processed 30 members, found 24 active members so far... 13:30:49
+Processed 60 members, found 52 active members so far... 13:32:11
+Processed 90 members, found 73 active members so far... 13:33:31
+Processed 120 members, found 93 active members so far... 13:34:50
 ...
 ```
