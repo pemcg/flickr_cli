@@ -3,6 +3,16 @@ Command-line tool to simplify admin of newly uploaded photos. It’s very specif
 
 When run the script opens a browser authentication window to enable you to login and authenticate the session.
 
+All authentication keys are held in a separate file `flickr_api/keys.py`, with the following format:
+
+```
+FLICKR_API_KEY       = '...fc85c09e7b5...'
+FLICKR_API_SECRET    = '...b8010...'
+USER_ID              = '...9724@N0.''
+HERE_APP_ID          = '...ZzL43zQf..'
+HERE_API_KEY         = '...zmKzgUUvjH...'
+```
+
 There are several command line arguments.
 
 ## Uploaded photo processing
@@ -85,7 +95,7 @@ Adding photo to group: 6x6 COLOR film...
 
 ### Optional arguments
 
-There are 4 optional argument that can be used with `—add`
+There are several optional argument that can be used with `—add`
 
 #### —digital
 
@@ -163,6 +173,16 @@ The `—location` argument can be used to geo-tag the photo based on a text stri
 
 The `—coords` argument can be used to geo-tag the photo based on NSEW-based latitude and longitude. For example when copied from a dropped pin in Apple Maps: `—coords "51.06612° N, 1.38359° W”`
 
+Both must be used with the `—id` argument to specify the photo ID on which to perform the operation.
+
+Example output:
+```
+./flickr_cli.py --id 54898585845 --coords "51.06971° N, 1.39455° W"
+127.0.0.1 - - [03/Nov/2025 11:31:12] "GET /?oauth_token=72157720958037565-0e7a26c6bed859b6&oauth_verifier=7c767e90f27abacc HTTP/1.1" 200 -
+You are now authenticated as f/5.6ish
+Setting location...
+```
+
 Either of these arguments can also be used in-line with the `—add` command as well.
 
 ## File uploads
@@ -173,7 +193,7 @@ The tool can be used to upload a file if the Flickr uploader is not used
 
 ## Group admin related functionality
 
-As I’m the admin of 3 groups, I wrote some functions to get me more insight into the groups that I am managing
+As I’m the admin of 3 groups, I wrote some functions to get me some insight into the groups that I am managing
 
 ### —get_group_photos
 
