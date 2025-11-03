@@ -99,11 +99,11 @@ Adding photo to group: 6x6 COLOR film...
 
 There are several optional argument that can be used with `—add`.
 
-##### —digital
+##### --digital
 
 The `—digital` argument that can be added to the command line which bypasses the adding of the photo to the film-specific groups. 
 
-##### —monochrome
+##### --monochrome
 
 The `—monochrome` argument indicates that the photo is monochrome but the original film stock was colour, so don’t add any self-developed tags or groups.
 
@@ -113,7 +113,7 @@ The `—monochrome` argument indicates that the photo is monochrome but the orig
 
 Some of the functions are useful when developing or extending the code base.
 
-#### —get_groups
+#### --get_groups
 
 The list of groups to add the photo to is hard-coded in the files `core_groups.py` and `add_utils.py`. To find out the group IDs of the groups that you’re a member of, use the `--get_groups` argument.
 
@@ -135,7 +135,7 @@ Group: /r/analog, id: 2154336@N24
 Group: 100 Strangers, id: 342582@N20
 ...
 ```
-#### —get_tags
+#### --get_tags
 
 The `—get_tags` argument retrieves the list of tags currently added to a photo. It must be used with the `—id` argument to specify the photo ID on which to perform the operation.
 
@@ -167,11 +167,11 @@ tag: 35mm Film
 
 There are 2 functions that can be used to geo-tag the photos in Flickr.
 
-#### —location
+#### --location
 
 The `—location` argument can be used to geo-tag the photo based on a text string such as "Winchester cathedral" or “Southampton”. This uses the Here API, and so requires a valid here API key in the `keys.py` file.
 
-#### —coords
+#### --coords
 
 The `—coords` argument can be used to geo-tag the photo based on NSEW-based latitude and longitude. For example when copied from a dropped pin in Apple Maps: `—coords "51.06612° N, 1.38359° W”`.
 
@@ -191,7 +191,7 @@ Either of these arguments can also be used in-line with the `—add` command as 
 
 The tool can be used to upload a file if the Flickr uploader is not used.
 
-#### —upload
+#### --upload
 
 The `—upload` switch can be used along with `—file`, `—title` and `—description` to upload a file to Flickr.
 
@@ -207,7 +207,7 @@ New photo id: 54898932289
 
 As I’m the admin of 3 groups, I wrote some functions to get me some insight into the groups that I'm managing.
 
-#### —get_group_photos
+#### --get_group_photos
 
 This is an argument to help with group admin activity. It requires the `—group` (current hardcoded as ‘hp5+', ‘delta3200’, or ‘wearenotdeadyet’ as these are the groups for which I’m admin), and `—days` which is the number of days to look back over. It prints a summary of the photos added to the group in the time period.
 
@@ -317,7 +317,7 @@ Group: &#039;Black and White&#039;  Creative Images!, id: 1575512@N25
 
 #### --get_user_groups_with_no_admin_activity
 
-This is a companion method to the above, but only lists groups (that you’re a member of) where none of the group admins have displayed any posting or fave activity in the specified number of days. This is useful in case you feel the need to contact Flickr admins and request a takeover of the admin role for the group.
+This is a companion function to the above, but only lists groups (that you’re a member of) where none of the group admins have displayed any posting or fave activity in the specified number of days. This is useful in case you feel the need to contact Flickr admins and request a takeover of the admin role for the group.
 
 Example output:
 ```
@@ -352,7 +352,7 @@ Group: Bessa R, id: 777631@N25
 ```
 #### --get_group_members_with_recent_activity
 
-This function looks to see which if the group’s member are still active, i.e have posted or faved anything in the previous specified number of days. Useful to see if (for example) a group has 4000 members, but only 500 are active on Flickr.
+This function looks to see which of the group’s member are still active, i.e have posted or faved anything in the previous specified number of days. Useful to see if (for example) a group has 4000 members, but only 500 are active on Flickr.
 This function takes a long time to run as it’s self-limiting to comply with the Flickr API guidelines for the number of API calls/hour made. The group names are hard-coded for my convenience and translated to their corresponding group ID in a hash.
 
 Example output:
