@@ -62,7 +62,7 @@ class Globals:
 		for group in flickr_data['groups']['group']:
 			cls.groups_by_name[group['name']] = group['id']
 			cls.groups_by_id[group['id']] = group['name']
-		# pprint.pprint(cls.groups)
+		# pprint.pprint(cls.groups_by_name)
 
 	@classmethod
 	def populate_albums(cls, flickr):
@@ -71,7 +71,7 @@ class Globals:
 		for album in flickr_data['photosets']['photoset']:
 			cls.albums_by_name[album['title']['_content']] = album['id']
 			cls.albums_by_id[album['id']] = album['title']['_content']
-		# pprint.pprint(cls.albums)
+		# pprint.pprint(cls.albums_by_name)
 
 	@classmethod
 	def populate_exif_data(cls, flickr, photo_id):
