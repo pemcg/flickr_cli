@@ -9,7 +9,7 @@ import flickr_api
 import get_utils
 import add_utils
 import group_utils
-import globals
+from globals import Globals
 from typing import List, Dict, Set, Optional
 
 #-------------------------------------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ def sanity_check_arguments(args: argparse.Namespace) -> bool:
     
    
     if hasattr(args, 'days') and args.days:
-        if args.days < 1:
+        if int(args.days) < 0:
             errors.append(f"days count must be positive, got: {args.days}")
     
     # Report errors and exit if any found
@@ -101,7 +101,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Add a photo to Flickr globals.groups.')
     parser.add_argument('--id', help='The ID of the photo or group to process', required=False)
     parser.add_argument('--get_groups', help='Get group list for photo or user', action='store_true')
-    parser.add_argument('--get_user_groups_with_admins', help='More details', action='store_true')
     parser.add_argument('--get_user_groups_with_admin_activity', help='More details', action='store_true')
     parser.add_argument('--get_user_groups_with_no_admin_activity', help='More details', action='store_true')
     parser.add_argument('--get_group_members_with_recent_activity', help='More details', action='store_true')
@@ -126,83 +125,86 @@ if __name__ == '__main__':
     # Sanity check arguments and their combinations
     #
     sanity_check_arguments(args)
+
     #
     # set some global variables based on command line arguments
     #
-    if args.digital:
-        globals.is_digital = True
-    if args.monochrome:
-        globals.is_monochrome = True
 
+
+    # Uncomment for debugging
     # logging.basicConfig(filename='flickr_cli.log', filemode='w', level=logging.DEBUG)
     # flickr_api.enable_debug_logging()
 
     flickr_client = flickr_api.authenticate()
-    #
-    # Photo-related arguments
-    #
-    if args.add:
-        add_utils.add_groups_and_tags(flickr_client, args.id)
+
+    if hasattr(args, 'id'):
+        Globals.initialize(flickr_client, args.id)
+    else:
+        Globals.initialize(flickr_client)
+
+    # Set global flags
+    if args.digital:
+        Globals.set_flag("is_digital", True)
+    if args.monochrome:
+        Globals.set_flag("is_monochrome", True)
+
+    def get_group_id(group_name: str, action_name: str) -> str:
+        """Get group ID for the specified group name."""
+        if group_name not in Globals.GROUP_IDS:
+            print(f"Need a valid group name for the {action_name} argument")
+            print(f"Available groups: {', '.join(Globals.GROUP_IDS.keys())}")
+            sys.exit(1)
+        return Globals.GROUP_IDS[group_name]
+
+    def handle_photo_operations():
+        """Handle photo-related operations."""
+        if args.add:
+            add_utils.add_groups_and_tags(flickr_client, args.id)
+            handle_location_operations()
+        elif args.get_tags:
+            get_utils.get_tags()
+
+    def handle_location_operations():
+        """Handle location-related operations."""
         if args.location:
             add_utils.add_geo_data_by_location(flickr_client, args.id, args.location)
         if args.coords:
             add_utils.add_geo_data_by_coords(flickr_client, args.id, args.coords)
-    # elif args.get_groups:
-    #     get_utils.get_photo_groups(flickr_client, args.id)
-    elif args.get_tags:
-        get_utils.get_tags(flickr_client, args.id, print_output=True)
-    #
-    # Location-related arguments
-    #
+
+    def handle_group_operations():
+        """Handle group-related operations."""
+        if args.get_groups:
+            get_utils.get_user_groups(flickr_client)
+        elif args.get_user_groups_with_admin_activity:
+            group_utils.get_user_groups_with_admin_activity(flickr_client, int(args.days))
+        elif args.get_user_groups_with_no_admin_activity:
+            group_utils.get_user_groups_with_no_admin_activity(flickr_client, int(args.days))
+        elif args.get_group_photos:
+            group_id = get_group_id(args.group, 'get_group_photos')
+            group_utils.get_group_photos(flickr_client, group_id, int(args.days), args.interactive)
+        elif args.get_group_members_with_recent_activity:
+            group_id = get_group_id(args.group, 'get_group_members_with_recent_activity')
+            group_utils.get_group_members_with_recent_activity(flickr_client, group_id, int(args.days))
+
+    def handle_upload_operations():
+        """Handle upload-related operations."""
+        if args.upload:
+            new_photo_id = flickr_api.upload(flickr_client, args.filename, args.title, args.description)
+            print(f"New photo id: {new_photo_id}")
+            # add_utils.add_groups_and_tags(flickr_client, new_photo_id)  # Uncomment if needed
+
+    def handle_follower_operations():
+        """Handle follower-related operations."""
+        if args.get_followers:
+            get_utils.get_followers(flickr_client, True)
+
+    # Execute operations
+    handle_photo_operations()
+
+    # Handle standalone location operations (when not part of add)
     if not args.add:
-        if args.location:
-            add_utils.add_geo_data_by_location(flickr_client, args.id, args.location)
-        if args.coords:
-            add_utils.add_geo_data_by_coords(flickr_client, args.id, args.coords)
-    #
-    # Group-related arguments
-    #
-    if args.get_groups:
-        get_utils.get_user_groups(flickr_client, print_output=True)
-    elif args.get_user_groups_with_admins:
-        group_utils.get_user_groups_with_admins(flickr_client)
-    elif args.get_user_groups_with_admin_activity:
-        group_utils.get_user_groups_with_admin_activity(flickr_client, int(args.days))
-    elif args.get_user_groups_with_no_admin_activity:
-        group_utils.get_user_groups_with_no_admin_activity(flickr_client, int(args.days))
-    elif args.get_group_photos:
-        match args.group:
-            case 'hp5+':
-                group_id = '342830@N20'
-            case 'delta3200':
-                group_id = '55584695@N00'
-            case 'wearenotdeadyet':
-                group_id = '1318947@N25'
-            case _:
-                print("Need the group name for the get_group_photos argument")
-                exit()
-        group_utils.get_group_photos(flickr_client, group_id, int(args.days), args.interactive)
-    elif args.get_group_members_with_recent_activity:
-        match args.group:
-            case 'hp5+':
-                group_id = '342830@N20'
-            case 'delta3200':
-                group_id = '55584695@N00'
-            case 'wearenotdeadyet':
-                group_id = '1318947@N25'
-            case _:
-                print("Need the group name for the get_group_members_with_recent_activity argument")
-                exit()
-        group_utils.get_group_members_with_recent_activity(flickr_client, group_id, int(args.days))
-    #
-    # Upload-related arguments
-    #
-    if args.upload:
-        new_photo_id = flickr_api.upload(flickr_client, args.filename, args.title, args.description)
-        print("New photo id: %s" % new_photo_id)
-        # utils.add_groups_and_tags(flickr_client, new_photo_id)
-    #
-    # Followers-related arguments
-    #
-    if args.get_followers:
-        get_utils.get_followers(flickr_client, True)
+        handle_location_operations()
+
+    handle_group_operations()
+    handle_upload_operations()
+    handle_follower_operations()

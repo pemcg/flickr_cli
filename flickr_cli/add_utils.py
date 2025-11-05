@@ -1,7 +1,7 @@
 # f/5.6ish
 
 import re
-import globals
+from globals import Globals
 import core_groups
 import flickr_api
 import here_api
@@ -134,12 +134,12 @@ def add_monochrome_film_groups_and_tags(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '1375913@N24') # Black and White Film Photography (bwfp)
     flickr_api.add_photo_to_group(flickr, photo_id, '72295300@N00') # Classic Black & White  ( Film Only)
     flickr_api.add_photo_to_group(flickr, photo_id, '737780@N25') # B/W_Analog
-    if globals.is_mono_from_colour:
+    if Globals.get_flag("is_mono_from_colour"):
         flickr_api.add_tag_to_photo(flickr, photo_id, '"Monochrome from Colour"')
     else:
         flickr_api.add_photo_to_group(flickr, photo_id, '693115@N20') # Self Developed Photographs
         flickr_api.add_tag_to_photo(flickr, photo_id, '"Ilfotec DD-X"')
-    if globals.is_35mm:
+    if Globals.get_flag("is_35mm"):
         flickr_api.add_photo_to_group(flickr, photo_id, '57796404@N00') # 35mm blackandwhite
 
 # -------------------------------------------------
@@ -165,71 +165,71 @@ def isBlank(myString):
 def add_camera_related_groups_and_tags_from_exif(flickr, photo_id):
     print("-- Adding camera-related groups and tags --")
 
-    if 'camera_make' in globals.exif_data:
-        camera_make = globals.exif_data['camera_make']
+    if 'camera_make' in Globals.exif_data:
+        camera_make = Globals.exif_data['camera_make']
         handle_camera_make(camera_make, flickr, photo_id)
-        camera_make_and_model = f"{camera_make} {globals.exif_data['camera_model']}"
+        camera_make_and_model = f"{camera_make} {Globals.exif_data['camera_model']}"
     else:
-        camera_make_and_model = globals.exif_data['camera_model']
+        camera_make_and_model = Globals.exif_data['camera_model']
 
     flickr_api.add_tag_to_photo(flickr, photo_id, f'"{camera_make_and_model}"')
     
     try:
-        flickr_api.add_photo_to_photoset(flickr, photo_id, globals.albums[camera_make_and_model])
+        flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name[camera_make_and_model])
     except KeyError:
         print(f"Album '{camera_make_and_model}' doesn't exist")
     
-    handle_camera_model(globals.exif_data['camera_model'], flickr, photo_id)
+    handle_camera_model(Globals.exif_data['camera_model'], flickr, photo_id)
 
 def handle_camera_make(camera_make, flickr, photo_id):
     match camera_make:
         case 'Nikon':
-            if not globals.is_digital:
+            if not Globals.get_flag("is_digital"):
                 add_nikon_groups_and_tags(flickr, photo_id)
-                globals.is_35mm = True
-            globals.is_Nikon = True
+                Globals.set_flag("is_35mm", True)
+            Globals.set_flag("is_Nikon", True)
         case 'Pentax':
             add_pentax_groups_and_tags(flickr, photo_id)
-            globals.is_35mm = True
-            globals.is_Pentax = True
+            Globals.set_flag("is_35mm", True)
+            Globals.set_flag("is_Pentax", True)
         case 'Hasselblad':
             add_hasselblad_groups_and_tags(flickr, photo_id)
-            globals.is_120 = True
-            globals.is_6x6 = True
-            globals.is_Hasselblad = True
+            Globals.set_flag("is_120", True)
+            Globals.set_flag("is_6x6", True)
+            Globals.set_flag("is_Hasselblad", True)
         case 'Bronica':
             add_bronica_groups_and_tags(flickr, photo_id)
-            globals.is_120 = True
-            globals.is_Bronica = True
+            Globals.set_flag("is_120", True)
+            Globals.set_flag("is_Bronica", True)
         case 'Leica':
             add_leica_groups_and_tags(flickr, photo_id)
-            globals.is_35mm = True
-            globals.is_Leica = True
+            Globals.set_flag("is_35mm", True)
+            Globals.set_flag("is_Leica", True)
         case 'Olympus':
             add_olympus_groups_and_tags(flickr, photo_id)
-            globals.is_35mm = True
-            globals.is_Olympus = True
+            Globals.set_flag("is_35mm", True)
+            Globals.set_flag("is_Olympus", True)
 
 def handle_camera_model(camera_model, flickr, photo_id):
     match camera_model:
         case 'F':
-            globals.is_NikonF = True
+            Globals.set_flag("is_NikonF", True)
         case 'F2':
             flickr_api.add_photo_to_group(flickr, photo_id, '33461219@N00')  # Nikon F2
-            globals.is_NikonF = True
+            Globals.set_flag("is_NikonF", True)
         case 'F3':
             flickr_api.add_photo_to_group(flickr, photo_id, '18787520@N00')  # Nikon F3
-            globals.is_NikonF = True
+            Globals.set_flag("is_NikonF", True)
         case 'F4':
             flickr_api.add_photo_to_group(flickr, photo_id, '685310@N22')   # Nikon F4
-            globals.is_NikonF = True
+            Globals.set_flag("is_NikonF", True)
         case 'FE2':
             flickr_api.add_photo_to_group(flickr, photo_id, '60376222@N00') # Nikon FE2
         case 'FM' | 'FM2':
             flickr_api.add_photo_to_group(flickr, photo_id, '95263654@N00') # Nikon FM series
         case 'Df':
             flickr_api.add_photo_to_group(flickr, photo_id, '2377061@N20')  # Nikon Df - Official
-            globals.is_vintage_digital = True
+            Globals.set_flag("is_vintage_digital", True)
         case 'MX':
             flickr_api.add_photo_to_group(flickr, photo_id, '32373122@N00') # Pentax MX
         case 'OM-2n':
@@ -242,22 +242,22 @@ def handle_camera_model(camera_model, flickr, photo_id):
             flickr_api.add_photo_to_group(flickr, photo_id, '1412184@N21')  # Leica Mini
         case 'Rollei 35':
             flickr_api.add_photo_to_group(flickr, photo_id, '60539930@N00') # Rollei 35
-            globals.is_35mm = True
+            Globals.set_flag("is_35mm", True)
         case 'Bessa R':
             flickr_api.add_photo_to_group(flickr, photo_id, '777631@N25')   # Bessa R
-            globals.is_35mm = True
+            Globals.set_flag("is_35mm", True)
         case 'GS645S':
             flickr_api.add_photo_to_group(flickr, photo_id, '2897798@N24')  # Fujica GS645
-            globals.is_120 = True
-            globals.is_6x45 = True
+            Globals.set_flag("is_120", True)
+            Globals.set_flag("is_6x45", True)
         case 'ETRSi':
             flickr_api.add_photo_to_group(flickr, photo_id, '765812@N25')   # ETRS
-            globals.is_6x45 = True
+            Globals.set_flag("is_6x45", True)
         case 'Rolleicord Vb':
             flickr_api.add_photo_to_group(flickr, photo_id, '87036574@N00') # Rolleicord
-            globals.is_120 = True
-            globals.is_6x6 = True
-            globals.is_TLR = True
+            Globals.set_flag("is_120", True)
+            Globals.set_flag("is_6x6", True)
+            Globals.set_flag("is_TLR", True)
 
 def add_leica_m6_groups(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '12985286@N00') # M6 & MP LEICA
@@ -280,15 +280,15 @@ def add_geo_data_by_coords(flickr, photo_id, coord_string):
 def add_film_related_groups_and_tags_from_tags(flickr, photo_id):
     print("-- Adding film-related groups and tags --")
 
-    for tag in get_utils.get_tags(flickr, photo_id):
-        handle_tag(tag["raw"], flickr, photo_id)
+    for tag in Globals.tags:
+        handle_tag(tag, flickr, photo_id)
 
 def handle_tag(tag, flickr, photo_id):
     match tag:
         case 'CineStill':
             flickr_api.add_photo_to_group(flickr, photo_id, '2233440@N25')  # CineStillFilm
         case 'BwXX':
-            globals.is_monochrome = True
+            Globals.set_flag("is_monochrome", True)
         case 'Lomography':
             flickr_api.add_photo_to_group(flickr, photo_id, '1007359@N22')  # Lomography Films
         case 'Kodak':
@@ -326,7 +326,7 @@ def handle_tag(tag, flickr, photo_id):
             flickr_api.add_photo_to_group(flickr, photo_id, '340428@N25') # ORWO Film
         case 'Neopan Acros II':
             flickr_api.add_photo_to_group(flickr, photo_id, '32685380@N00') # Acros
-            globals.is_monochrome = True
+            Globals.set_flag("is_monochrome", True)
         case 'Monochrome':
             handle_monochrome()
 
@@ -341,32 +341,32 @@ def handle_portra_400(flickr, photo_id):
 def handle_ilford(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '90025665@N00') # Ilford
     flickr_api.add_photo_to_group(flickr, photo_id, '444964@N25')  # I Shoot Ilford Film
-    globals.is_monochrome = True
+    Globals.set_flag("is_monochrome", True)
 
 def handle_kentmere_100(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '14783717@N20') # Kentmere 100
-    globals.is_monochrome = True
+    Globals.set_flag("is_monochrome", True)
 
 def handle_kentmere_200(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '14940565@N22') # Kentmere Pan 200
-    globals.is_monochrome = True
+    Globals.set_flag("is_monochrome", True)
 
 def handle_kentmere_400(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '3984266@N20') # Kentmere 400
-    globals.is_monochrome = True
+    Globals.set_flag("is_monochrome", True)
 
 def handle_monochrome():
-    globals.is_monochrome = True
-    globals.is_mono_from_colour = True
+    Globals.set_flag("is_monochrome", True)
+    Globals.set_flag("is_mono_from_colour", True)
 
 # -------------------------------------------------
 
 def add_lens_related_groups_and_tags_from_exif(flickr, photo_id):
     print("-- Adding lens-related groups and tags --")
     
-    lens_model = globals.exif_data['lens_model']
-    focal_length = globals.exif_data['focal_length']
-    lens_make = globals.exif_data['lens_make']
+    lens_model = Globals.exif_data['lens_model']
+    focal_length = Globals.exif_data['focal_length']
+    lens_make = Globals.exif_data['lens_make']
 
     # Handle lens make cases
     match lens_make:
@@ -393,7 +393,7 @@ def add_lens_related_groups_and_tags_from_exif(flickr, photo_id):
     flickr_api.add_tag_to_photo(flickr, photo_id, f'"{focal_length} Lens"')
     
     try:
-        flickr_api.add_photo_to_photoset(flickr, photo_id, globals.albums[lens_model])
+        flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name[lens_model])
     except KeyError:
         print(f"Album '{lens_model}' doesn't exist")
 
@@ -418,9 +418,9 @@ def handle_nikon_lenses(lens_model, flickr, photo_id):
         flickr_api.add_photo_to_group(flickr, photo_id, '401700@N21') # Nikkor 28mm f/2.8 lens
     elif re.search('PC-Nikkor 28mm f/3.5', lens_model):
         flickr_api.add_photo_to_group(flickr, photo_id, '1184925@N22') # PC-Nikkor 28mm F3.5
-        globals.is_pc_lens = True
+        Globals.set_flag("is_pc_lens", True)
     elif re.search('PC-Nikkor 35mm f/2.8', lens_model):
-        globals.is_pc_lens = True
+        Globals.set_flag("is_pc_lens", True)
     elif re.search(r'\bNikkor 35mm f/2\b', lens_model):
         flickr_api.add_photo_to_group(flickr, photo_id, '946552@N23') # Nikkor 35mm f/2
     elif re.search('Nikkor 50mm f/1.4', lens_model):
@@ -453,44 +453,44 @@ def handle_voigtlander_lenses(lens_model, flickr, photo_id):
 def add_derived_groups_and_tags(flickr, photo_id):
     print("-- Adding derived groups and tags --")
 
-    if globals.is_35mm:
+    if Globals.get_flag("is_35mm"):
         add_35mm_groups_and_tags(flickr, photo_id)
 
-    if globals.is_120:
+    if Globals.get_flag("is_120"):
         add_120_groups_and_tags(flickr, photo_id)
 
-        if globals.is_6x6:
-            group_id = '38457755@N00' if globals.is_monochrome else '514022@N22'
+        if Globals.get_flag("is_6x6"):
+            group_id = '38457755@N00' if Globals.get_flag("is_monochrome") else '514022@N22'
             flickr_api.add_photo_to_group(flickr, photo_id, group_id)
 
-        if globals.is_6x45:
+        if Globals.get_flag("is_6x45"):
             add_645_groups_and_tags(flickr, photo_id)
 
-        if globals.is_TLR:
+        if Globals.get_flag("is_TLR"):
             add_tlr_groups_and_tags(flickr, photo_id)
 
-    if globals.is_square:
+    if Globals.get_flag("is_square"):
         add_square_groups_and_tags(flickr, photo_id)
 
-    if globals.is_monochrome:
-        if globals.is_digital:
+    if Globals.get_flag("is_monochrome"):
+        if Globals.get_flag("is_digital"):
             add_monochrome_groups_and_tags(flickr, photo_id)
         else:
             add_monochrome_film_groups_and_tags(flickr, photo_id)
 
-            if globals.is_Leica:
+            if Globals.get_flag("is_Leica"):
                 add_leica_monochrome_groups_and_tags(flickr, photo_id)
 
-    if globals.is_NikonF:
+    if Globals.get_flag("is_NikonF"):
         flickr_api.add_photo_to_group(flickr, photo_id, '1192730@N21')
 
-    if globals.is_pc_lens:
+    if Globals.get_flag("is_pc_lens"):
         add_pc_lens_groups_and_tags(flickr, photo_id)
 
-    if globals.is_vintage_digital:
+    if Globals.get_flag("is_vintage_digital"):
         add_vintage_digital_groups_and_tags(flickr, photo_id)
 
-    if globals.is_digital and globals.is_vintage_lens:
+    if Globals.get_flag("is_digital") and Globals.get_flag("is_vintage_lens"):
         flickr_api.add_photo_to_group(flickr, photo_id, '1513273@N23')
 
 # -------------------------------------------------  
@@ -502,19 +502,15 @@ def callback(progress):
 # -------------------------------------------------  
 
 def add_groups_and_tags(flickr, photo_id):
-    print("Getting photo exif data from Flickr...")
-    get_utils.get_camera_exif_data(flickr, photo_id)
     print("Photo dimensions in pixels: %s" % get_utils.get_photo_sizes(flickr, photo_id))
-    get_utils.get_user_groups(flickr)
 
-    if globals.is_digital:
+    if Globals.get_flag("is_digital"):
         add_core_digital_groups(flickr, photo_id)
     else:
         add_core_film_groups(flickr, photo_id)
         add_core_film_tags(flickr, photo_id)
         add_film_related_groups_and_tags_from_tags(flickr, photo_id)
 
-    get_utils.get_albums(flickr)
     add_camera_related_groups_and_tags_from_exif(flickr, photo_id)
     add_lens_related_groups_and_tags_from_exif(flickr, photo_id)
     add_derived_groups_and_tags(flickr, photo_id)

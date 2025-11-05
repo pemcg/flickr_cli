@@ -1,9 +1,10 @@
 # f/5.6ish
 
 import re
-import globals
+from globals import Globals
 import flickr_api
 import json
+import pprint
 
 # -------------------------------------------------
 
@@ -27,21 +28,9 @@ def get_geo_coordinates_from_coord_string(coord_string):
 
 # -------------------------------------------------
 
-def get_tags(flickr, photo_id, print_output=False):
-	flickr_data = flickr_api.get_photo_info(flickr, photo_id)
-	if print_output:
-		for tag in flickr_data['photo']['tags']['tag']:
-			print(f'tag: {tag["raw"]}')
-	return flickr_data['photo']['tags']['tag']
-
-# -------------------------------------------------
-
-def get_albums(flickr):
-	print("Getting albums from Flickr...")
-	flickr_data = flickr_api.get_photosets(flickr)
-	for album in flickr_data['photosets']['photoset']:
-		globals.albums[album['title']['_content']] = album['id']
-		globals.albums[album['id']] = album['title']['_content']
+def get_tags():
+	for tag in Globals.tags:
+		print(f'tag: {tag}')
 
 # -------------------------------------------------
 
@@ -64,36 +53,9 @@ def get_user_faves_count_for_recent_period(flickr, user_id, days):
 
 # -------------------------------------------------
 
-def get_camera_exif_data(flickr, photo_id):
-	globals.exif_data = {}
-	flickr_data = flickr_api.get_photo_exif(flickr, photo_id)
-	if flickr_data:
-		for tag in flickr_data['photo']['exif']:
-			if tag['tagspace'] == 'IFD0':
-				match tag['label']:
-					case 'Make':
-						globals.exif_data['camera_make'] = tag['raw']['_content']
-					case 'Model':
-						globals.exif_data['camera_model'] = tag['raw']['_content']
-			elif tag['tagspace'] == 'ExifIFD':
-				match tag['label']:
-					case 'Lens Make':
-						globals.exif_data['lens_make'] = tag['raw']['_content']
-					case 'Lens Model':
-						globals.exif_data['lens_model'] = tag['raw']['_content']
-					case 'Focal Length':
-						globals.exif_data['focal_length'] = re.search('(\d{1,3})\.*\d{0,1} mm', tag['raw']['_content'])[1] + "mm"
-
-# -------------------------------------------------
-
-def get_user_groups(flickr, print_output=False):
-	print("Getting user groups from Flickr...")
-	flickr_data = flickr_api.get_pool_groups(flickr)
-	for group in flickr_data['groups']['group']:
-		globals.groups[group['name']] = group['id']
-		globals.groups[group['id']]   = group['name']
-		if print_output:
-			print(f'Group: {group["name"]}, id: {group["id"]}')
+def get_user_groups(flickr):
+	for group, id in Globals.groups_by_name.items():
+		print(f'Group: {group}, id: {id}')
 
 # -------------------------------------------------
 
@@ -114,7 +76,7 @@ def get_photo_sizes(flickr, photo_id):
 	for size in flickr_data['sizes']['size']:
 		if size['label'] == 'Original':
 			if size['width'] == size['height']:
-				globals.is_square = True
+				Globals.set_flag(is_square, True)
 			return [size['width'], size['height']]
 
 # -------------------------------------------------
