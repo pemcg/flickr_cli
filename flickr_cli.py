@@ -126,11 +126,6 @@ if __name__ == '__main__':
     #
     sanity_check_arguments(args)
 
-    #
-    # set some global variables based on command line arguments
-    #
-
-
     # Uncomment for debugging
     # logging.basicConfig(filename='flickr_cli.log', filemode='w', level=logging.DEBUG)
     # flickr_api.enable_debug_logging()
@@ -142,7 +137,9 @@ if __name__ == '__main__':
     else:
         Globals.initialize(flickr_client)
 
-    # Set global flags
+    #
+    # set some global variables based on command line arguments
+    #
     if args.digital:
         Globals.set_flag("is_digital", True)
     if args.monochrome:
@@ -202,7 +199,7 @@ if __name__ == '__main__':
     handle_photo_operations()
 
     # Handle standalone location operations (when not part of add)
-    if not args.add:
+    if not hasattr(args, 'add'):
         handle_location_operations()
 
     handle_group_operations()

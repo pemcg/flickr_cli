@@ -286,36 +286,37 @@ def add_film_related_groups_and_tags_from_tags(flickr, photo_id):
 def handle_tag(tag, flickr, photo_id):
     match tag:
         case 'CineStill':
-            flickr_api.add_photo_to_group(flickr, photo_id, '2233440@N25')  # CineStillFilm
+            handle_cinestill(flickr, photo_id)
         case 'BwXX':
             Globals.set_flag("is_monochrome", True)
         case 'Lomography':
-            flickr_api.add_photo_to_group(flickr, photo_id, '1007359@N22')  # Lomography Films
+            handle_lomography(flickr, photo_id)
         case 'Kodak':
-            flickr_api.add_photo_to_group(flickr, photo_id, '89218479@N00') # I Shoot Kodak Film
+            handle_kodak(flickr, photo_id)
         case 'Portra 160':
             handle_portra_160(flickr, photo_id)
         case 'Portra 400':
             handle_portra_400(flickr, photo_id)
         case 'Portra 800':
-            flickr_api.add_photo_to_group(flickr, photo_id, '31794144@N00') # Portra Films
+            handle_portra_800(flickr, photo_id)
         case 'UltraMax 400':
-            flickr_api.add_photo_to_group(flickr, photo_id, '1070587@N20')  # Kodak UltraMax
+            handle_ultramax(flickr, photo_id)
         case 'Ilford':
             handle_ilford(flickr, photo_id)
+        case 'FP4+':
+            handle_fp4(flickr, photo_id)
         case 'HP5+':
-            flickr_api.add_photo_to_group(flickr, photo_id, '342830@N20')  # Ilford HP5 Plus
+            handle_hp5(flickr, photo_id)
         case 'Phoenix' | 'Phoenix II':
-            flickr_api.add_photo_to_group(flickr, photo_id, '14828111@N25') # Harman Phoenix 200 film
+            handle_phoenix(flickr, photo_id)
         case 'Delta 400':
-            flickr_api.add_photo_to_group(flickr, photo_id, '42554446@N00') # Ilford Delta 400 b&w film
+            handle_delta_400(flickr, photo_id)
         case 'Delta 3200':
-            flickr_api.add_photo_to_group(flickr, photo_id, '55584695@N00') # Ilford DELTA 3200 Professional b&w film
+            handle_delta_3200(flickr, photo_id)
         case 'Kentmere':
-            flickr_api.add_photo_to_group(flickr, photo_id, '2091972@N25') # Kentmere Film
+            handle_kentmere(flickr, photo_id)
         case 'Harman':
-            flickr_api.add_photo_to_group(flickr, photo_id, '2622163@N24') # Harman Film Technology
-            flickr_api.add_tag_to_photo(flickr, photo_id, 'harmanphoto')
+            handle_harman(flickr, photo_id)
         case 'Kentmere 100':
             handle_kentmere_100(flickr, photo_id)
         case 'Kentmere 200':
@@ -323,38 +324,91 @@ def handle_tag(tag, flickr, photo_id):
         case 'Kentmere 400':
             handle_kentmere_400(flickr, photo_id)
         case 'Orwo':
-            flickr_api.add_photo_to_group(flickr, photo_id, '340428@N25') # ORWO Film
+            handle_orwo(flickr, photo_id)
         case 'Neopan Acros II':
-            flickr_api.add_photo_to_group(flickr, photo_id, '32685380@N00') # Acros
-            Globals.set_flag("is_monochrome", True)
+            handle_acros(flickr, photo_id)
         case 'Monochrome':
             handle_monochrome()
 
-def handle_portra_160(flickr, photo_id):
-    flickr_api.add_photo_to_group(flickr, photo_id, '1635005@N21')  # New Kodak Portra 160
-    flickr_api.add_photo_to_group(flickr, photo_id, '31794144@N00') # Portra Films
+def handle_harman(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '2622163@N24') # Harman Film Technology
+    flickr_api.add_tag_to_photo(flickr, photo_id, 'harmanphoto')
 
-def handle_portra_400(flickr, photo_id):
-    flickr_api.add_photo_to_group(flickr, photo_id, '1499236@N20')  # New Kodak Portra 400
-    flickr_api.add_photo_to_group(flickr, photo_id, '31794144@N00') # Portra Films
+def handle_kentmere(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '2091972@N25') # Kentmere Film
+    Globals.set_flag("is_monochrome", True)
 
 def handle_ilford(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '90025665@N00') # Ilford
     flickr_api.add_photo_to_group(flickr, photo_id, '444964@N25')  # I Shoot Ilford Film
     Globals.set_flag("is_monochrome", True)
 
+def handle_kodak(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '89218479@N00') # I Shoot Kodak Film
+
+def handle_lomography(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '1007359@N22')  # Lomography Films
+
+def handle_cinestill(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '2233440@N25')  # CineStillFilm
+
+def handle_orwo(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '340428@N25') # ORWO Film
+
+def handle_portra_160(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '1635005@N21')  # New Kodak Portra 160
+    flickr_api.add_photo_to_group(flickr, photo_id, '31794144@N00') # Portra Films
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Kodak Portra 160'])
+
+def handle_portra_400(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '1499236@N20')  # New Kodak Portra 400
+    flickr_api.add_photo_to_group(flickr, photo_id, '31794144@N00') # Portra Films
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Kodak Portra 400'])
+
+def handle_portra_800(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '31794144@N00') # Portra Films
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Kodak Portra 800'])
+
+def handle_ultramax(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '1070587@N20')  # Kodak UltraMax
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Kodak Ultramax 400'])
+
+def handle_phoenix(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '14828111@N25') # Harman Phoenix 200 film
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Harman Phoenix 200'])
+
+def handle_fp4(flickr, photo_id):
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Ilford FP4+'])
+
+def handle_hp5(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '342830@N20')  # Ilford HP5 Plus
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Ilford HP5+'])
+
+def handle_delta_400(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '42554446@N00') # Ilford Delta 400 b&w film
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Ilford Delta 400'])
+
+def handle_delta_3200(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '55584695@N00') # Ilford DELTA 3200 Professional b&w film
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Ilford Delta 3200'])
+
 def handle_kentmere_100(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '14783717@N20') # Kentmere 100
-    Globals.set_flag("is_monochrome", True)
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Kentmere 100'])
 
 def handle_kentmere_200(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '14940565@N22') # Kentmere Pan 200
-    Globals.set_flag("is_monochrome", True)
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Kentmere 200'])
 
 def handle_kentmere_400(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '3984266@N20') # Kentmere 400
-    Globals.set_flag("is_monochrome", True)
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Kentmere 400'])
 
+def handle_acros(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '32685380@N00') # Acros
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Fujifilm Neopan Acros II'])
+    Globals.set_flag("is_monochrome", True)
+    
 def handle_monochrome():
     Globals.set_flag("is_monochrome", True)
     Globals.set_flag("is_mono_from_colour", True)
