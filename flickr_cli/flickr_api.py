@@ -5,7 +5,7 @@ import inspect
 import sys
 import os.path
 import logging
-import globals
+from globals import Globals
 import keys
 import add_utils
 import xml.etree.ElementTree as ET
@@ -58,7 +58,7 @@ def get_group_members(flickr, group_id, membertypes, page=1):
 
 def add_photo_to_group(flickr, photo_id, group_id):
     try:
-        print(f'Adding photo to group: {globals.groups[group_id]}...')
+        print(f'Adding photo to group: {Globals.groups_by_id[group_id]}...')
         flickr.groups.pools.add(photo_id=photo_id, group_id=group_id)
     except flickrapi.exceptions.FlickrError as ex:
         print_error(ex)
@@ -132,7 +132,7 @@ def set_photo_location(flickr, photo_id, lat, lon, accuracy, context):
 
 def add_photo_to_photoset(flickr, photo_id, photoset_id):
     try:
-        print(f'Adding photo to album: {globals.albums[photoset_id]}...')
+        print(f'Adding photo to album: {Globals.albums_by_id[photoset_id]}...')
         flickr.photosets.addPhoto(photo_id=photo_id, photoset_id=photoset_id)
     except flickrapi.exceptions.FlickrError as ex:
         print_error(ex)
