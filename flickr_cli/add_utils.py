@@ -382,7 +382,13 @@ def handle_fp4(flickr, photo_id):
 
 def handle_hp5(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '342830@N20')  # Ilford HP5 Plus
-    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Ilford HP5+'])
+    match Globals.exif_data['iso']:
+        case '400':
+            flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Ilford HP5+ (box speed)'])
+        case '800':
+            flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Ilford HP5+ @800 ISO'])
+        case '1600':
+            flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Ilford HP5+ @1600 ISO'])
 
 def handle_delta_400(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '42554446@N00') # Ilford Delta 400 b&w film

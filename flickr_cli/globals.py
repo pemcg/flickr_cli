@@ -93,6 +93,8 @@ class Globals:
 							cls.exif_data['lens_model'] = tag['raw']['_content']
 						case 'Focal Length':
 							cls.exif_data['focal_length'] = re.search('(\d{1,3})\.*\d{0,1} mm', tag['raw']['_content'])[1] + "mm"
+						case 'ISO Speed':
+							cls.exif_data['iso'] = tag['raw']['_content']
 		# pprint.pprint(cls.exif_data)
 
 	@classmethod
