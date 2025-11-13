@@ -301,6 +301,8 @@ def handle_tag(tag, flickr, photo_id):
             handle_portra_800(flickr, photo_id)
         case 'UltraMax 400':
             handle_ultramax(flickr, photo_id)
+        case 'Ektar 400':
+            handle_ektar(flickr, photo_id)
         case 'Ilford':
             handle_ilford(flickr, photo_id)
         case 'FP4+':
@@ -372,6 +374,9 @@ def handle_portra_800(flickr, photo_id):
 def handle_ultramax(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '1070587@N20')  # Kodak UltraMax
     flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Kodak Ultramax 400'])
+
+def handle_ektar(flickr, photo_id):
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Kodak Ektar 400'])
 
 def handle_phoenix(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '14828111@N25') # Harman Phoenix 200 film

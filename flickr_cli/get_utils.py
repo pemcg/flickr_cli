@@ -76,7 +76,7 @@ def get_photo_sizes(flickr, photo_id):
 	for size in flickr_data['sizes']['size']:
 		if size['label'] == 'Original':
 			if size['width'] == size['height']:
-				Globals.set_flag(is_square, True)
+				Globals.set_flag("is_square", True)
 			return [size['width'], size['height']]
 
 # -------------------------------------------------
