@@ -301,7 +301,7 @@ def handle_tag(tag, flickr, photo_id):
             handle_portra_800(flickr, photo_id)
         case 'UltraMax 400':
             handle_ultramax(flickr, photo_id)
-        case 'Ektar 400':
+        case 'Ektar 100':
             handle_ektar(flickr, photo_id)
         case 'Ilford':
             handle_ilford(flickr, photo_id)
