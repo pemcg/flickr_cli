@@ -90,9 +90,26 @@ def add_120_groups_and_tags(flickr, photo_id):
 
 # -------------------------------------------------
 
-def add_645_groups_and_tags(flickr, photo_id):
+def add_6x6_groups_and_tags(flickr, photo_id):
+    flickr_api.add_tag_to_photo(flickr, photo_id, '"6x6 Medium Format"')
+
+# -------------------------------------------------
+
+def add_6x45_groups_and_tags(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '304405@N25') # 645 Medium Format
-    flickr_api.add_tag_to_photo(flickr, photo_id, '"645 Medium Format"')
+    flickr_api.add_tag_to_photo(flickr, photo_id, '"6x45 Medium Format"')
+
+# -------------------------------------------------
+
+def add_6x9_groups_and_tags(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '31284338@N00') # 6x9 Photography - not for changeable backs/lenses
+    flickr_api.add_tag_to_photo(flickr, photo_id, '"6x9 Medium Format"')
+
+# -------------------------------------------------
+
+def add_fuji_rangefinder_groups_and_tags(flickr, photo_id):
+    flickr_api.add_tag_to_photo(flickr, photo_id, '"Fuji Rangefinder"')
+    flickr_api.add_photo_to_group(flickr, photo_id, '762957@N22') # FUJI RANGEFINDER FILM CAMERAS
 
 # -------------------------------------------------
 
@@ -250,6 +267,12 @@ def handle_camera_model(camera_model, flickr, photo_id):
             flickr_api.add_photo_to_group(flickr, photo_id, '2897798@N24')  # Fujica GS645
             Globals.set_flag("is_120", True)
             Globals.set_flag("is_6x45", True)
+            Globals.set_flag("is_Fuji_rangefinder", True)
+        case 'GW690':
+            flickr_api.add_photo_to_group(flickr, photo_id, '980734@N22')  # Fuji GW 690
+            Globals.set_flag("is_120", True)
+            Globals.set_flag("is_6x9", True)
+            Globals.set_flag("is_Fuji_rangefinder", True)
         case 'ETRSi':
             flickr_api.add_photo_to_group(flickr, photo_id, '765812@N25')   # ETRS
             Globals.set_flag("is_6x45", True)
@@ -527,9 +550,13 @@ def add_derived_groups_and_tags(flickr, photo_id):
         if Globals.get_flag("is_6x6"):
             group_id = '38457755@N00' if Globals.get_flag("is_monochrome") else '514022@N22'
             flickr_api.add_photo_to_group(flickr, photo_id, group_id)
+            add_6x6_groups_and_tags(flickr, photo_id)
 
         if Globals.get_flag("is_6x45"):
-            add_645_groups_and_tags(flickr, photo_id)
+            add_6x45_groups_and_tags(flickr, photo_id)
+
+        if Globals.get_flag("is_6x9"):
+            add_6x9_groups_and_tags(flickr, photo_id)
 
         if Globals.get_flag("is_TLR"):
             add_tlr_groups_and_tags(flickr, photo_id)
@@ -548,6 +575,9 @@ def add_derived_groups_and_tags(flickr, photo_id):
 
     if Globals.get_flag("is_NikonF"):
         flickr_api.add_photo_to_group(flickr, photo_id, '1192730@N21')
+
+    if Globals.get_flag("is_Fuji_rangefinder"):
+        add_fuji_rangefinder_groups_and_tags(flickr, photo_id)
 
     if Globals.get_flag("is_pc_lens"):
         add_pc_lens_groups_and_tags(flickr, photo_id)
