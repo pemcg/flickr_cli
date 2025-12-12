@@ -397,6 +397,7 @@ def handle_portra_800(flickr, photo_id):
     flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Kodak Portra 800'])
 
 def handle_gold(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '37682607@N00') # Kodak Gold
     flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Kodak Gold 200'])
 
 def handle_ultramax(flickr, photo_id):
@@ -528,7 +529,7 @@ def handle_pentax_lenses(lens_model, flickr, photo_id):
         flickr_api.add_photo_to_group(flickr, photo_id, '2354873@N25') # SMC Pentax-M 40mm 1:2.8
 
 def handle_voigtlander_lenses(lens_model, flickr, photo_id):
-    globals.is_vintage_lens = False
+    Globals.set_flag("is_vintage_lens", False)
     flickr_api.add_photo_to_group(flickr, photo_id, '51035603760@N01') # Voigtlander
     if re.search('Color Skopar 28mm f/2.8', lens_model):
         flickr_api.add_photo_to_group(flickr, photo_id, '2065317@N20') # Voigtländer Color Skopar 28mm SLII

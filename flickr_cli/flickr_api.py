@@ -1,6 +1,7 @@
 # f/5.6ish
 
 import flickrapi
+import webbrowser
 import inspect
 import sys
 import os.path
@@ -32,7 +33,15 @@ def authenticate():
         flickr = flickrapi.FlickrAPI(keys.FLICKR_API_KEY, keys.FLICKR_API_SECRET, store_token=True, format='parsed-json')
         flickr.authenticate_via_browser(perms='write')
         # verify = str(input('Press Enter to continue:> '))
-        flickr.get_access_token("")
+
+        # if not flickr.token_valid(perms='write'):
+        #     flickr.get_request_token(oauth_callback='oob')
+        #     authorize_url = flickr.auth_url(perms='write')
+        #     webbrowser.open_new_tab(authorize_url)
+        #     verifier = str(input('Verifier code: '))
+        #     flickr.get_access_token(verifier)
+
+        # flickr.get_access_token("")
         login = flickr.test.login()
         print(f'You are now authenticated as {login["user"]["username"]["_content"]}')
         return flickr

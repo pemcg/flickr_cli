@@ -126,8 +126,20 @@ core_film_groups = [
         'id': '1505315@N25',
     },
     {
+        'title': 'Ultimatum',
+        'id': '14879677@N20',
+    },
+    {
         'title': 'Upgrade to Film',
         'id': '1260179@N20',
+    },
+    {
+        'title': 'We are not dead yet',
+        'id': '1318947@N25',
+    },
+    {
+        'title': 'we still care',
+        'id': '2641137@N23',
     },
     {
         'title': 'We Use Film',
