@@ -59,6 +59,10 @@ def add_6x6_groups_and_tags(flickr, photo_id):
 # -------------------------------------------------
 
 def add_6x7_groups_and_tags(flickr, photo_id):
+    if Globals.get_flag("is_monochrome"):
+        flickr_api.add_photo_to_group(flickr, photo_id, '516777@N22') # 6x7 B&W
+    else:
+        flickr_api.add_photo_to_group(flickr, photo_id, '498174@N25') # 6x7 -COLOR-
     flickr_api.add_tag_to_photo(flickr, photo_id, '"6x7 Medium Format"')
 
 # -------------------------------------------------
@@ -95,7 +99,6 @@ def add_monochrome_groups_and_tags(flickr, photo_id):
 # -------------------------------------------------
 
 def add_monochrome_film_groups_and_tags(flickr, photo_id):
-    add_monochrome_groups_and_tags(flickr, photo_id)
     flickr_api.add_photo_to_group(flickr, photo_id, '99542567@N00') # Black and White Film
     flickr_api.add_photo_to_group(flickr, photo_id, '1375913@N24') # Black and White Film Photography (bwfp)
     flickr_api.add_photo_to_group(flickr, photo_id, '72295300@N00') # Classic Black & White  ( Film Only)
@@ -202,9 +205,9 @@ def add_film_related_groups_and_tags_from_tags(flickr, photo_id):
             case 'Monochrome':
                 add_monochrome_groups_and_tags()
     
-def add_monochrome_groups_and_tags():
-    Globals.set_flag("is_monochrome", True)
-    Globals.set_flag("is_mono_from_colour", True)
+# def add_monochrome_groups_and_tags(flickr, photo_id):
+#     Globals.set_flag("is_monochrome", True)
+#     Globals.set_flag("is_mono_from_colour", True)
 
 # -------------------------------------------------
 

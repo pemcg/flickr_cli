@@ -143,7 +143,7 @@ if __name__ == '__main__':
     if args.digital:
         Globals.set_flag("is_digital", True)
     if args.monochrome:
-        Globals.set_flag("is_monochrome", True)
+        Globals.set_flag("is_mono_from_colour", True)
 
     def get_group_id(group_name: str, action_name: str) -> str:
         """Get group ID for the specified group name."""
