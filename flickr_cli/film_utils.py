@@ -79,7 +79,7 @@ def add_ultramax_groups_and_tags(flickr, photo_id):
 # -------------------------------------------------
 
 def add_ektar_groups_and_tags(flickr, photo_id):
-    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Kodak Ektar 400'])
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Kodak Ektar 100'])
 
 # -------------------------------------------------
 
@@ -159,7 +159,7 @@ def add_core_film_tags(flickr, photo_id):
     flickr_api.add_tag_to_photo(flickr, photo_id, '"Shooting Film"')
     flickr_api.add_tag_to_photo(flickr, photo_id, '"Believe In Film"')
     flickr_api.add_tag_to_photo(flickr, photo_id, '"Essential Film Holder"')
-    flickr_api.add_tag_to_photo(flickr, photo_id, '"Analogue Toolbox for Capture One"')
+    flickr_api.add_tag_to_photo(flickr, photo_id, '"Capture One"')
     flickr_api.add_tag_to_photo(flickr, photo_id, 'Film')
     flickr_api.add_tag_to_photo(flickr, photo_id, 'Analogue')
 

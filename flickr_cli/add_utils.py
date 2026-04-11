@@ -214,8 +214,14 @@ def add_film_related_groups_and_tags_from_tags(flickr, photo_id):
 def add_lens_related_groups_and_tags_from_exif(flickr, photo_id):
     print("-- Adding lens-related groups and tags --")
     
-    lens_model = Globals.exif_data['lens_model']
-    focal_length = Globals.exif_data['focal_length']
+    if 'lens_model' in Globals.exif_data:
+        lens_model = Globals.exif_data['lens_model']
+    else:
+        lens_model = ''
+    if 'focal_length' in Globals.exif_data:
+        focal_length = Globals.exif_data['focal_length']
+    else:
+        focal_length = ''
     if 'lens_make' in Globals.exif_data:
         lens_make = Globals.exif_data['lens_make']
     else:

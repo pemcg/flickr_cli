@@ -81,11 +81,12 @@ def handle_camera_model(camera_model, flickr, photo_id):
             Globals.set_flag("is_rangefinder", True)
         case 'GS645S':
             flickr_api.add_photo_to_group(flickr, photo_id, '2897798@N24')  # Fujica GS645
+            flickr_api.add_photo_to_group(flickr, photo_id, '14903278@N20')  # Fuji GS645 pro
             Globals.set_flag("is_120", True)
             Globals.set_flag("is_6x45", True)
             Globals.set_flag("is_rangefinder", True)
             Globals.set_flag("is_Fuji_rangefinder", True)
-        case 'GW690':
+        case 'GW690III':
             flickr_api.add_photo_to_group(flickr, photo_id, '980734@N22')  # Fuji GW 690
             Globals.set_flag("is_120", True)
             Globals.set_flag("is_6x9", True)
