@@ -11,10 +11,9 @@ import keys
 import add_utils
 import xml.etree.ElementTree as ET
 import time
-import requests
-from requests_oauthlib import OAuth1
+# import requests
+# from requests_oauthlib import OAuth1
 from datetime import datetime, timedelta
-from tenacity import retry
 
 
 GEO_ACCURACY_WORLD   = 1
@@ -31,7 +30,7 @@ GEO_CONTEXT_OUTDOORS = 2
 def authenticate():
     try:
         flickr = flickrapi.FlickrAPI(keys.FLICKR_API_KEY, keys.FLICKR_API_SECRET, store_token=True, format='parsed-json')
-        flickr.authenticate_via_browser(perms='write')
+
         # verify = str(input('Press Enter to continue:> '))
 
         # if not flickr.token_valid(perms='write'):
@@ -164,7 +163,6 @@ def get_follower_notifications(flickr, page=1):
 
 # -------------------- People --------------------
 
-@retry
 def get_user_photo_count(flickr, user_id, days_ago):
     now = datetime.now()
     requested_date = int(time.mktime(now.timetuple())) - (int(days_ago) * 24 * 60 * 60)    
@@ -215,7 +213,6 @@ def get_followers(flickr):
 
 # -------------------- Favourites --------------------
 
-@retry
 def get_user_faves_count(flickr, user_id, days_ago):
     now = datetime.now()
     requested_date = int(time.mktime(now.timetuple())) - (int(days_ago) * 24 * 60 * 60)

@@ -96,6 +96,7 @@ def handle_camera_model(camera_model, flickr, photo_id):
             flickr_api.add_photo_to_group(flickr, photo_id, '765812@N25')   # ETRS
             Globals.set_flag("is_6x45", True)
         case 'GS-1':
+            flickr_api.add_photo_to_group(flickr, photo_id, '898676@N20')   # Bronica GS-1
             Globals.set_flag("is_6x7", True)
         case 'Rolleicord Vb':
             flickr_api.add_photo_to_group(flickr, photo_id, '87036574@N00') # Rolleicord

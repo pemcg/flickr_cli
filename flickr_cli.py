@@ -114,7 +114,6 @@ if __name__ == '__main__':
     parser.add_argument('--filename', help='The filename of the photo to upload to Flickr')
     parser.add_argument('--title', help='The title of the photo to upload to Flickr')
     parser.add_argument('--description', help='The description of the photo to upload to Flickr')
-    parser.add_argument('--location', help='The name of the location where photo was taken (e.g. "Winchester")', required=False)
     parser.add_argument('--coords', help='The Apple Maps dropped pin string coordinates of location where photo was taken', required=False)
     parser.add_argument('--get_followers', help='Get a list of followers', action='store_true')
     parser.add_argument('--digital', help='Use to indicate that this is a digital image', action='store_true')
@@ -163,8 +162,6 @@ if __name__ == '__main__':
 
     def handle_location_operations():
         """Handle location-related operations."""
-        if args.location:
-            add_utils.add_geo_data_by_location(flickr_client, args.id, args.location)
         if args.coords:
             add_utils.add_geo_data_by_coords(flickr_client, args.id, args.coords)
 

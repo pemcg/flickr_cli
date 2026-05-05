@@ -2,7 +2,6 @@
 
 from globals import Globals
 import flickr_api
-import here_api
 import get_utils
 import film_utils
 import lens_utils
@@ -136,12 +135,6 @@ def add_camera_related_groups_and_tags_from_exif(flickr, photo_id):
         print(f"Album '{camera_make_and_model}' doesn't exist")
     
     camera_utils.handle_camera_model(Globals.exif_data['camera_model'], flickr, photo_id)
-
-# -------------------------------------------------
-
-def add_geo_data_by_location(flickr, photo_id, location):
-    coords = here_api.get_geo_coordinates_from_location(location)
-    flickr_api.set_photo_location(flickr, photo_id, coords['lat'], coords['lon'], flickr_api.GEO_ACCURACY_CITY, flickr_api.GEO_CONTEXT_OUTDOORS)
 
 # -------------------------------------------------
 
