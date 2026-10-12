@@ -17,6 +17,8 @@ class Globals:
 	flags = {
 		"is_square"           : False,
 		"is_digital"          : False,
+		"is_full_frame"       : False,
+		"is_apsc"             : False,
 		"is_monochrome"       : False,
 		"is_mono_from_colour" : False,
 		"is_35mm"             : False,
@@ -25,6 +27,7 @@ class Globals:
 		"is_6x7"              : False,
 		"is_6x6"              : False,
 		"is_6x45"             : False,
+		"is_medium_format"    : False,
 		"is_Leica"            : False,
 		"is_Nikon"            : False,
 		"is_NikonF"           : False,
@@ -52,16 +55,17 @@ class Globals:
 	}
 
 	@classmethod
-	def initialize(cls, flickr, photo_id=None):
-		cls.populate_albums(flickr)
-		cls.populate_groups(flickr)
+	def initialize(cls, flickr, photo_id=None, brief=None):
+		if brief is None:
+			cls.populate_albums(flickr)
+			cls.populate_groups(flickr)
 		if photo_id is not None:
 			cls.populate_exif_data(flickr, photo_id)
 			cls.populate_tags(flickr, photo_id)
 
 	@classmethod
 	def populate_groups(cls, flickr):
-		print("Getting user groups from Flickr...")
+		# print("Getting user groups from Flickr...")
 		flickr_data = flickr_api.get_pool_groups(flickr)
 		for group in flickr_data['groups']['group']:
 			cls.groups_by_name[group['name']] = group['id']
@@ -70,7 +74,7 @@ class Globals:
 
 	@classmethod
 	def populate_albums(cls, flickr):
-		print("Getting albums from Flickr...")
+		# print("Getting albums from Flickr...")
 		flickr_data = flickr_api.get_photosets(flickr)
 		for album in flickr_data['photosets']['photoset']:
 			cls.albums_by_name[album['title']['_content']] = album['id']
@@ -79,7 +83,8 @@ class Globals:
 
 	@classmethod
 	def populate_exif_data(cls, flickr, photo_id):
-		print("Getting photo exif data from Flickr...")
+		# print("Getting photo exif data from Flickr...")
+		cls.exif_data = {}
 		flickr_data = flickr_api.get_photo_exif(flickr, photo_id)
 		if flickr_data:
 			for tag in flickr_data['photo']['exif']:
@@ -103,7 +108,7 @@ class Globals:
 
 	@classmethod
 	def populate_tags(cls, flickr, photo_id):
-		print("Getting photo tags from Flickr...")
+		# print("Getting photo tags from Flickr...")
 		flickr_data = flickr_api.get_photo_info(flickr, photo_id)
 		for tag in flickr_data['photo']['tags']['tag']:
 			cls.tags.append(tag["raw"])

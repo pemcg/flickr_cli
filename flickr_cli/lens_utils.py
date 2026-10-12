@@ -67,6 +67,13 @@ def handle_voigtlander_lenses(lens_model, flickr, photo_id):
 
 # -------------------------------------------------
 
+def handle_mandler_lenses(lens_model, flickr, photo_id):
+    Globals.set_flag("is_vintage_lens", False)
+    flickr_api.add_photo_to_group(flickr, photo_id, '14896199@N24') # Mandler 35mm F2 7 elements
+    flickr_api.add_tag_to_photo(flickr, photo_id, '"Mandler"')
+
+# -------------------------------------------------
+
 def add_pc_lens_groups_and_tags(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '97236268@N00') # Tilt Shift
     flickr_api.add_tag_to_photo(flickr, photo_id, '"Perspective Control"')

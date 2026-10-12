@@ -52,6 +52,11 @@ def add_6x45_groups_and_tags(flickr, photo_id):
 
 # -------------------------------------------------
 
+def add_medium_format_groups_and_tags(flickr, photo_id):
+    flickr_api.add_tag_to_photo(flickr, photo_id, '"Medium Format Film"')
+
+# -------------------------------------------------
+
 def add_6x6_groups_and_tags(flickr, photo_id):
     flickr_api.add_tag_to_photo(flickr, photo_id, '"6x6 Medium Format"')
 
@@ -151,10 +156,14 @@ def add_film_related_groups_and_tags_from_tags(flickr, photo_id):
         match tag:
             case 'CineStill':
                 film_utils.add_cinestill_groups_and_tags(flickr, photo_id)
+            case '400D':
+                film_utils.add_cinestill_400d_groups_and_tags(flickr, photo_id)
             case 'BwXX':
                 Globals.set_flag("is_monochrome", True)
             case 'Lomography':
                 film_utils.add_lomography_groups_and_tags(flickr, photo_id)
+            case 'CN400':
+                film_utils.add_cn400_groups_and_tags(flickr, photo_id)
             case 'Kodak':
                 film_utils.add_kodak_groups_and_tags(flickr, photo_id)
             case 'Portra 160':
@@ -220,6 +229,8 @@ def add_lens_related_groups_and_tags_from_exif(flickr, photo_id):
     else:
         lens_make = ''
 
+    flickr_api.add_tag_to_photo(flickr, photo_id, f'"{lens_model}"')
+
     # Handle lens make cases
     match lens_make:
         case 'Carl Zeiss':
@@ -236,6 +247,8 @@ def add_lens_related_groups_and_tags_from_exif(flickr, photo_id):
             flickr_api.add_photo_to_group(flickr, photo_id, '1060957@N23') # Jupiter 8 50mm 2.0
         case 'Voigtländer':
             lens_utils.handle_voigtlander_lenses(lens_model, flickr, photo_id)
+        case 'Mandler':
+            lens_utils.handle_mandler_lenses(lens_model, flickr, photo_id)
 
     # Handle focal length cases
     if focal_length == '28mm':
@@ -260,6 +273,7 @@ def add_derived_groups_and_tags(flickr, photo_id):
 
     if Globals.get_flag("is_120"):
         add_120_groups_and_tags(flickr, photo_id)
+        add_medium_format_groups_and_tags(flickr, photo_id)
 
         if Globals.get_flag("is_6x6"):
             group_id = '38457755@N00' if Globals.get_flag("is_monochrome") else '514022@N22'

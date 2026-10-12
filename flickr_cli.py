@@ -9,6 +9,7 @@ import flickr_api
 import get_utils
 import add_utils
 import group_utils
+import analytics_utils
 from globals import Globals
 from typing import List, Dict, Set, Optional
 
@@ -118,6 +119,7 @@ if __name__ == '__main__':
     parser.add_argument('--get_followers', help='Get a list of followers', action='store_true')
     parser.add_argument('--digital', help='Use to indicate that this is a digital image', action='store_true')
     parser.add_argument('--monochrome', help='Use to indicate that this is a monochrome image', action='store_true')
+    parser.add_argument('--analytics', help='generate some analytic data on whoch cameras ar used with which film', action='store_true')
     args = parser.parse_args()
 
     #
@@ -192,6 +194,10 @@ if __name__ == '__main__':
         if args.get_followers:
             get_utils.get_followers(flickr_client, True)
 
+    def handle_analytic_operations():
+        if args.analytics:
+            analytics_utils.cameras_by_film_type(flickr_client)
+
     # Execute operations
     handle_photo_operations()
 
@@ -202,3 +208,4 @@ if __name__ == '__main__':
     handle_group_operations()
     handle_upload_operations()
     handle_follower_operations()
+    handle_analytic_operations()

@@ -41,6 +41,23 @@ def get_photo_groups(flickr, photo_id):
 
 # -------------------------------------------------
 
+def get_albums_in_collection(flickr, collection_name):
+	flickr_data = flickr_api.get_collection_tree(flickr)
+	for collection in flickr_data['collections']['collection']:
+		if collection['title'] == collection_name:
+			return collection['set']
+
+# -------------------------------------------------
+
+def get_photos_in_album(flickr, album_id):
+	photo_ids = []
+	flickr_data = flickr_api.get_photos_in_photoset(flickr, album_id)
+	for photo in flickr_data['photoset']['photo']:
+		photo_ids.append(photo['id'])
+	return photo_ids
+	
+# -------------------------------------------------
+
 def get_user_photo_count_for_recent_period(flickr, user_id, days):
 	flickr_data = flickr_api.get_user_photo_count(flickr, user_id, days)
 	return flickr_data["photos"]["total"]

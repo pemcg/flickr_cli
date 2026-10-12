@@ -8,8 +8,10 @@ import flickr_api
 def handle_camera_make(camera_make, flickr, photo_id):
     match camera_make:
         case 'Nikon':
-            if not Globals.get_flag("is_digital"):
-                add_nikon_groups_and_tags(flickr, photo_id)
+            if  Globals.get_flag("is_digital"):
+                add_digital_nikon_groups_and_tags(flickr, photo_id)
+            else:
+                add_film_nikon_groups_and_tags(flickr, photo_id)
                 Globals.set_flag("is_35mm", True)
             Globals.set_flag("is_Nikon", True)
         case 'Pentax':
@@ -20,14 +22,19 @@ def handle_camera_make(camera_make, flickr, photo_id):
             add_hasselblad_groups_and_tags(flickr, photo_id)
             Globals.set_flag("is_120", True)
             Globals.set_flag("is_6x6", True)
+            Globals.set_flag("is_medium_format", True)
             Globals.set_flag("is_Hasselblad", True)
         case 'Bronica':
             add_bronica_groups_and_tags(flickr, photo_id)
             Globals.set_flag("is_120", True)
+            Globals.set_flag("is_medium_format", True)
             Globals.set_flag("is_Bronica", True)
         case 'Leica':
-            add_leica_groups_and_tags(flickr, photo_id)
-            Globals.set_flag("is_35mm", True)
+            if  Globals.get_flag("is_digital"):
+                add_digital_leica_groups_and_tags(flickr, photo_id)
+            else:
+                add_film_leica_groups_and_tags(flickr, photo_id)
+                Globals.set_flag("is_35mm", True)
             Globals.set_flag("is_Leica", True)
         case 'Olympus':
             add_olympus_groups_and_tags(flickr, photo_id)
@@ -55,24 +62,46 @@ def handle_camera_model(camera_model, flickr, photo_id):
             flickr_api.add_photo_to_group(flickr, photo_id, '95263654@N00') # Nikon FM series
         case 'Df':
             flickr_api.add_photo_to_group(flickr, photo_id, '2377061@N20')  # Nikon Df - Official
+            Globals.set_flag("is_digital", True)
             Globals.set_flag("is_vintage_digital", True)
+            Globals.set_flag("is_full_frame", True)
         case 'MX':
             flickr_api.add_photo_to_group(flickr, photo_id, '32373122@N00') # Pentax MX
         case 'OM-2n':
             flickr_api.add_photo_to_group(flickr, photo_id, '478168@N24') # Olympus OM-2 (Please read the TAG rules)
         case 'M6':
+            # add_film_leica_groups_and_tags(flickr, photo_id)
             add_leica_m6_groups(flickr, photo_id)
             Globals.set_flag("is_rangefinder", True)
+            Globals.set_flag("is_35mm", True)
         case 'iiif':
+            # add_film_leica_groups_and_tags(flickr, photo_id)
             flickr_api.add_photo_to_group(flickr, photo_id, '63875550@N00') # Leica IIIf
             Globals.set_flag("is_rangefinder", True)
+            Globals.set_flag("is_35mm", True)
         case 'Mini II':
+            # add_film_leica_groups_and_tags(flickr, photo_id)
             flickr_api.add_photo_to_group(flickr, photo_id, '1412184@N21')  # Leica Mini
+            Globals.set_flag("is_35mm", True)
+        case 'M10':
+            # add_digital_leica_groups_and_tags(flickr, photo_id)
+            add_leica_m10_groups(flickr, photo_id)
+            Globals.set_flag("is_digital", True)
+            Globals.set_flag("is_rangefinder", True)
+            Globals.set_flag("is_full_frame", True)
+        case 'X2':
+            # add_digital_leica_groups_and_tags(flickr, photo_id)
+            flickr_api.add_photo_to_group(flickr, photo_id, '1253758@N22')  # LEICA X1 & X2 Users
+            Globals.set_flag("is_digital", True)
+            Globals.set_flag("is_vintage_lens", False)
+            Globals.set_flag("is_vintage_digital", True)
+            Globals.set_flag("is_apsc", True)
         case 'Rollei 35':
             flickr_api.add_photo_to_group(flickr, photo_id, '60539930@N00') # Rollei 35
             Globals.set_flag("is_35mm", True)
         case 'PowerShot S120':
             flickr_api.add_photo_to_group(flickr, photo_id, '2372297@N21') # Canon Powershot S120
+            Globals.set_flag("is_digital", True)
             Globals.set_flag("is_vintage_lens", False)
             Globals.set_flag("is_vintage_digital", True)
         case 'Bessa R':
@@ -84,12 +113,14 @@ def handle_camera_model(camera_model, flickr, photo_id):
             flickr_api.add_photo_to_group(flickr, photo_id, '14903278@N20')  # Fuji GS645 pro
             Globals.set_flag("is_120", True)
             Globals.set_flag("is_6x45", True)
+            Globals.set_flag("is_medium_format", True)
             Globals.set_flag("is_rangefinder", True)
             Globals.set_flag("is_Fuji_rangefinder", True)
         case 'GW690III':
             flickr_api.add_photo_to_group(flickr, photo_id, '980734@N22')  # Fuji GW 690
             Globals.set_flag("is_120", True)
             Globals.set_flag("is_6x9", True)
+            Globals.set_flag("is_medium_format", True)
             Globals.set_flag("is_rangefinder", True)
             Globals.set_flag("is_Fuji_rangefinder", True)
         case 'ETRSi':
@@ -103,6 +134,7 @@ def handle_camera_model(camera_model, flickr, photo_id):
             Globals.set_flag("is_120", True)
             Globals.set_flag("is_6x6", True)
             Globals.set_flag("is_TLR", True)
+            Globals.set_flag("is_medium_format", True)
 
 # -------------------------------------------------
 
@@ -112,11 +144,28 @@ def add_leica_m6_groups(flickr, photo_id):
 
 # -------------------------------------------------
 
+def add_leica_m10_groups(flickr, photo_id):
+    flickr_api.add_photo_to_group(flickr, photo_id, '3099284@N24') # Leica M10 / M10-P / M10-D
+
+# -------------------------------------------------
+
 def add_nikon_groups_and_tags(flickr, photo_id):
+    flickr_api.add_tag_to_photo(flickr, photo_id, '"Nikon"')
+
+# -------------------------------------------------
+
+def add_film_nikon_groups_and_tags(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '1006613@N25') # Nikon Analogue
     flickr_api.add_photo_to_group(flickr, photo_id, '1691203@N23') # Nikon Film Photography
     flickr_api.add_photo_to_group(flickr, photo_id, '32237332@N00') # Nikon Film Cameras
-    flickr_api.add_tag_to_photo(flickr, photo_id, '"Nikon"')
+    flickr_api.add_tag_to_photo(flickr, photo_id, '"Film Nikon"')
+    add_nikon_groups_and_tags(flickr, photo_id)
+
+# -------------------------------------------------
+
+def add_digital_nikon_groups_and_tags(flickr, photo_id):
+    # flickr_api.add_photo_to_group(flickr, photo_id, '2515979@N21') # Leica film Camera
+    flickr_api.add_tag_to_photo(flickr, photo_id, '"Digital Nikon"')
 
 # -------------------------------------------------
 
@@ -131,9 +180,15 @@ def add_olympus_groups_and_tags(flickr, photo_id):
 
 # -------------------------------------------------
 
-def add_leica_groups_and_tags(flickr, photo_id):
+def add_film_leica_groups_and_tags(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '2515979@N21') # Leica film Camera
-    flickr_api.add_tag_to_photo(flickr, photo_id, '"Leica"')
+    flickr_api.add_tag_to_photo(flickr, photo_id, '"Film Leica"')
+
+# -------------------------------------------------
+
+def add_digital_leica_groups_and_tags(flickr, photo_id):
+    # flickr_api.add_photo_to_group(flickr, photo_id, '2515979@N21') # Leica film Camera
+    flickr_api.add_tag_to_photo(flickr, photo_id, '"Digital Leica"')
 
 # -------------------------------------------------
 

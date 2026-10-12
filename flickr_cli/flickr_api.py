@@ -152,6 +152,24 @@ def get_photosets(flickr):
     except flickrapi.exceptions.FlickrError as ex:
         print_error(ex)
 
+
+def get_photos_in_photoset(flickr, photoset_id):
+    try:
+        flickr_return = flickr.photosets.getPhotos(photoset_id=photoset_id)
+        return flickr_return
+    except flickrapi.exceptions.FlickrError as ex:
+        print_error(ex)
+
+# -------------------- Collections --------------------
+
+def get_collection_tree(flickr):
+    try:
+        flickr_return = flickr.collections.getTree()
+        return flickr_return
+    except flickrapi.exceptions.FlickrError as ex:
+        print_error(ex)
+
+
 # -------------------- Activity --------------------
 
 def get_follower_notifications(flickr, page=1):

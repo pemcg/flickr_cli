@@ -36,8 +36,18 @@ def add_lomography_groups_and_tags(flickr, photo_id):
 
 # -------------------------------------------------
 
+def add_cn400_groups_and_tags(flickr, photo_id):
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['Lomography CN400'])
+
+# -------------------------------------------------
+
 def add_cinestill_groups_and_tags(flickr, photo_id):
     flickr_api.add_photo_to_group(flickr, photo_id, '2233440@N25')  # CineStillFilm
+
+# -------------------------------------------------
+
+def add_cinestill_400d_groups_and_tags(flickr, photo_id):
+    flickr_api.add_photo_to_photoset(flickr, photo_id, Globals.albums_by_name['CineStill 400D'])
 
 # -------------------------------------------------
 
@@ -158,7 +168,7 @@ def add_core_film_tags(flickr, photo_id):
     flickr_api.add_tag_to_photo(flickr, photo_id, '"Film Photography"')
     flickr_api.add_tag_to_photo(flickr, photo_id, '"Shooting Film"')
     flickr_api.add_tag_to_photo(flickr, photo_id, '"Believe In Film"')
-    flickr_api.add_tag_to_photo(flickr, photo_id, '"Essential Film Holder"')
+    flickr_api.add_tag_to_photo(flickr, photo_id, '"Valoi 360"')
     flickr_api.add_tag_to_photo(flickr, photo_id, '"Capture One"')
     flickr_api.add_tag_to_photo(flickr, photo_id, 'Film')
     flickr_api.add_tag_to_photo(flickr, photo_id, 'Analogue')
