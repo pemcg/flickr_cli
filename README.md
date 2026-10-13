@@ -367,3 +367,43 @@ Processed 90 members, found 73 active members so far... 13:33:31
 Processed 120 members, found 93 active members so far... 13:34:50
 ...
 ```
+
+#### --analytics
+
+This switch produces a sorted table of which camera and lens combinations have been used most for each film stock. The script assumes that each photo is placed in an album for camera, lens, and film stock, for example 'Pentax MX', 'SMC Pentax-M 40mm f/2.8', and 'CineStill 800T'. It also assumes that all of the lens albums are in a collection called 'Lenses', all of the camera albums are in a collection called 'Cameras', and all of the film albums are in a collection called 'Film Stocks'.
+
+Example output:
+```
+./flickr_cli.py --analytics
+You are now authenticated as f/5.6ish
+CineStill 400D
+Rollei 35:  26
+Leica M6 + Voigtländer Ultron VM 35mm f/2:  9
+Fuji GS645S:  7
+Nikon FM + Nikkor 50mm f/2 Ai:  5
+Nikon FM + Voigtländer Color Skopar 28mm f/2.8 SL IIs:  4
+Leica M6 + Carl Zeiss C-Sonnar T* 50mm f/1.5 ZM:  2
+Leica M6 + Leica Summicron-M 35mm ASPH (v2):  2
+Leica Mini II:  2
+Nikon FM + Nikkor 85mm f/2 Ai:  1
+Nikon FM + Nikkor 24mm f/2.8 Ai-S:  1
+Pentax MX + SMC Pentax-M 28mm f/2.8:  1
+Pentax MX + SMC Pentax-M 50mm f/1.4:  1
+
+CineStill 800T
+Olympus OM-2n + Zuiko 50mm f/1.4 (silver nose):  11
+Nikon F3 + PC-Nikkor 28mm f/3.5:  8
+Pentax MX + SMC Pentax-M 40mm f/2.8:  6
+Nikon F3 + Nikkor 50mm f/1.4 Ai-S:  3
+Pentax MX + SMC Pentax-M 50mm f/1.7:  2
+Olympus OM-2n + Zuiko 28mm f/2.8:  1
+Pentax MX + SMC Pentax-M 200mm f/4:  1
+Nikon F3 + Vivitar 135mm f/2.8:  1
+
+Cinestill BwXX
+Nikon F2 + Nikkor 50mm f/1.8 Ai-S (Japan) Pancake:  4
+Leica M6 + Voigtländer Ultron VM 35mm f/2:  4
+Rolleicord Vb:  4
+Nikon F2 + Nikkor 50mm f/1.4 Ai-S:  2
+Leica M6 + Carl Zeiss C-Sonnar T* 50mm f/1.5 ZM:  2
+```
